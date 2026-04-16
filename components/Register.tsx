@@ -92,7 +92,7 @@ export default function Register() {
       {/* 結 watermark */}
       <div style={{ position: "absolute", font: "700 50vw/1 var(--serif)", color: "rgba(255,255,255,.012)", bottom: "-15%", right: "-5%", pointerEvents: "none", userSelect: "none" }}>結</div>
 
-      <div className="s-title reveal" style={{ color: "var(--dp)", marginBottom: 36, position: "relative", zIndex: 2 }}
+      <div className="s-title reveal" style={{ color: "var(--dp)", marginBottom: 36, position: "relative", zIndex: 2, lineHeight: 1.5 }}
         dangerouslySetInnerHTML={{ __html: t("지금 등록하면,<br>가장 먼저 만납니다.", "今登録すれば、<br>最初に出会えます。") }}
       />
 
@@ -122,47 +122,87 @@ export default function Register() {
 
       {/* Form */}
       {!success ? (
-        <div className="reveal" style={{ maxWidth: 340, margin: "0 auto", position: "relative", zIndex: 2 }}>
-          <div style={{ position: "relative", marginBottom: 20 }}>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder=" "
-              style={{
-                width: "100%", padding: "20px 16px 8px", border: "1px solid var(--bd)", background: "transparent",
-                color: "var(--dp)", font: "400 14px/1 var(--sans)", outline: "none", transition: ".3s",
-              }}
-            />
-            <label style={{
-              position: "absolute", left: 16, top: email ? 10 : "50%", transform: email ? "translateY(0)" : "translateY(-50%)",
-              font: `400 ${email ? "10px" : "13px"}/1 var(--sans)`, color: email ? "var(--ds)" : "var(--dt)",
-              pointerEvents: "none", transition: "all .2s ease", letterSpacing: email ? 1 : 0,
-            }}>
-              {t("이메일 주소", "メールアドレス")}
-            </label>
+        <div
+          className="reveal"
+          style={{
+            maxWidth: 340,
+            margin: "0 auto",
+            position: "relative",
+            zIndex: 2,
+            padding: "28px 22px",
+            background: "rgba(255,255,255,.03)",
+            border: "1px solid rgba(255,255,255,.08)",
+            borderRadius: 12,
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+          }}
+        >
+          {/* Email field group */}
+          <div style={{ marginBottom: 24, textAlign: "left" }}>
+            <div style={{ font: "500 11px/1 var(--sans)", color: "var(--dt)", letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 10 }}>
+              {t("이메일", "メール")}
+            </div>
+            <div style={{ position: "relative" }}>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder={t("your@email.com", "your@email.com")}
+                style={{
+                  width: "100%",
+                  padding: "14px 16px",
+                  border: "1px solid rgba(255,255,255,.15)",
+                  borderRadius: 6,
+                  background: "rgba(0,0,0,.4)",
+                  color: "var(--dp)",
+                  font: "400 14px/1 var(--sans)",
+                  outline: "none",
+                  transition: ".3s",
+                }}
+                onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,.5)"; }}
+                onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,.15)"; }}
+              />
+            </div>
           </div>
 
-          <div style={{ font: "500 13px/1 var(--sans)", color: "var(--ds)", marginBottom: 10, letterSpacing: 1 }}>{t("나는", "私は")}</div>
-          <div style={{ display: "flex", gap: 10, marginBottom: 16 }}>
-            {genderButtons.map((g) => (
-              <div
-                key={g.value}
-                onClick={() => setGender(g.value)}
-                style={{
-                  flex: 1, padding: "16px 12px", border: `1px solid ${gender === g.value ? "var(--dp)" : "var(--bd)"}`,
-                  background: gender === g.value ? "rgba(255,255,255,.05)" : "transparent", cursor: "pointer",
-                  transition: ".3s", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
-                }}
-              >
-                <span style={{ font: "700 14px/1 var(--sans)", color: gender === g.value ? "var(--dp)" : "var(--dt)" }}>{g.flag}</span>
-                <span style={{ font: "600 13px/1 var(--sans)", color: gender === g.value ? "var(--dp)" : "var(--dt)", transition: ".3s" }}>{g.label}</span>
-              </div>
-            ))}
+          {/* Visual divider */}
+          <div style={{ height: 1, background: "linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent)", margin: "0 -22px 24px" }} />
+
+          {/* Gender selection group */}
+          <div style={{ textAlign: "left" }}>
+            <div style={{ font: "500 11px/1 var(--sans)", color: "var(--dt)", letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 10 }}>
+              {t("국적 · 성별", "国籍 · 性別")}
+            </div>
+            <div style={{ display: "flex", gap: 10, marginBottom: 12 }}>
+              {genderButtons.map((g) => (
+                <div
+                  key={g.value}
+                  onClick={() => setGender(g.value)}
+                  style={{
+                    flex: 1,
+                    padding: "16px 12px",
+                    border: `1px solid ${gender === g.value ? "var(--dp)" : "rgba(255,255,255,.15)"}`,
+                    borderRadius: 6,
+                    background: gender === g.value ? "rgba(255,255,255,.1)" : "rgba(0,0,0,.4)",
+                    cursor: "pointer",
+                    transition: ".3s",
+                    textAlign: "center",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 10,
+                  }}
+                >
+                  <span style={{ font: "700 14px/1 var(--sans)", color: gender === g.value ? "var(--dp)" : "var(--dt)" }}>{g.flag}</span>
+                  <span style={{ font: "600 13px/1 var(--sans)", color: gender === g.value ? "var(--dp)" : "var(--dt)", transition: ".3s" }}>{g.label}</span>
+                </div>
+              ))}
+            </div>
+            <div
+              style={{ font: "400 12px/1.5 var(--sans)", color: "rgba(255,255,255,.35)", textAlign: "center", marginBottom: 20, marginTop: 14 }}
+              dangerouslySetInnerHTML={{ __html: t("<em style='font-style:normal;color:var(--ds)'>한국 남성 × 일본 여성</em> 매칭에 특화된 서비스입니다", "<em style='font-style:normal;color:var(--ds)'>韓国人男性 × 日本人女性</em> マッチングに特化したサービスです") }}
+            />
           </div>
-          <div style={{ font: "400 13px/1.5 var(--sans)", color: "rgba(255,255,255,.2)", textAlign: "center", marginBottom: 24 }}
-            dangerouslySetInnerHTML={{ __html: t("<em style='font-style:normal;color:var(--dt)'>한국 남성 × 일본 여성</em> 매칭에 특화된 서비스입니다", "<em style='font-style:normal;color:var(--dt)'>韓国人男性 × 日本人女性</em> マッチングに特化したサービスです") }}
-          />
 
           <button
             ref={btnRef}

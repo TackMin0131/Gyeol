@@ -58,46 +58,6 @@ export default function GyeolCard() {
         position: "relative",
       }}
     >
-      {/* Magic Rings background effect */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          inset: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          pointerEvents: "none",
-          zIndex: 0,
-        }}
-      >
-        {/* Expanding ripple rings - emanate from center */}
-        {[0, 1, 2, 3, 4, 5].map((i) => (
-          <div
-            key={i}
-            style={{
-              position: "absolute",
-              width: 120,
-              height: 120,
-              borderRadius: "50%",
-              border: "1.5px solid rgba(255,255,255,0.35)",
-              animation: `magicRipple 5s cubic-bezier(.25,.1,.25,1) ${i * 0.8}s infinite`,
-              opacity: 0,
-            }}
-          />
-        ))}
-        {/* Center radial glow */}
-        <div
-          style={{
-            position: "absolute",
-            width: 500,
-            height: 500,
-            borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 30%, transparent 65%)",
-            animation: "magicGlowPulse 5s ease-in-out infinite",
-          }}
-        />
-      </div>
 
       <div
         ref={cardRef}
