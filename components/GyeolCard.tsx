@@ -50,12 +50,55 @@ export default function GyeolCard() {
         perspective: 800,
         display: "flex",
         justifyContent: "center",
-        padding: "20px 0",
+        alignItems: "center",
+        padding: "60px 0",
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(24px)",
         transition: "opacity .7s ease, transform .7s ease",
+        position: "relative",
       }}
     >
+      {/* Magic Rings background effect */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          inset: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          pointerEvents: "none",
+          zIndex: 0,
+        }}
+      >
+        {/* Expanding ripple rings - emanate from center */}
+        {[0, 1, 2, 3, 4, 5].map((i) => (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              width: 120,
+              height: 120,
+              borderRadius: "50%",
+              border: "1.5px solid rgba(255,255,255,0.35)",
+              animation: `magicRipple 5s cubic-bezier(.25,.1,.25,1) ${i * 0.8}s infinite`,
+              opacity: 0,
+            }}
+          />
+        ))}
+        {/* Center radial glow */}
+        <div
+          style={{
+            position: "absolute",
+            width: 500,
+            height: 500,
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 30%, transparent 65%)",
+            animation: "magicGlowPulse 5s ease-in-out infinite",
+          }}
+        />
+      </div>
+
       <div
         ref={cardRef}
         onMouseMove={(e) => handleMove(e.clientX, e.clientY)}
@@ -70,8 +113,11 @@ export default function GyeolCard() {
           maxWidth: 340,
           padding: "36px 28px",
           position: "relative",
+          zIndex: 1,
           borderRadius: 8,
-          background: "rgba(255,255,255,.04)",
+          background: "rgba(20,20,20,.85)",
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
           border: "1px solid rgba(255,255,255,.08)",
           transform: `rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg)`,
           transition: tilt.rx === 0 ? "transform .5s ease" : "transform .05s ease",

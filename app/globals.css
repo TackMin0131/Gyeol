@@ -55,6 +55,15 @@ body {
   0%,100% { opacity: .7; transform: translateX(-50%) scale(1); }
   50% { opacity: 1; transform: translateX(-50%) scale(1.15); }
 }
+@keyframes magicRipple {
+  0% { transform: scale(0.3); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: scale(4.5); opacity: 0; }
+}
+@keyframes magicGlowPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
 
 /* ── Gradient dividers ── */
 .g-divider { height: 1px; background: linear-gradient(90deg,transparent,var(--bl),transparent); }
