@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLang } from "@/hooks/useLang";
 import { useReveal } from "@/hooks/useReveal";
 
@@ -30,21 +30,31 @@ export default function Features() {
   const { lang } = useLang();
   const sectionRef = useReveal<HTMLElement>();
   const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const [shown, setShown] = useState<boolean[]>([false, false, false, false]);
 
   useEffect(() => {
+    const observers: IntersectionObserver[] = [];
     itemsRef.current.forEach((item, i) => {
       if (!item) return;
       const obs = new IntersectionObserver(
         (entries) => entries.forEach((e) => {
           if (e.isIntersecting) {
-            setTimeout(() => item.classList.add("visible"), i * 150);
+            setTimeout(() => {
+              setShown((prev) => {
+                const next = [...prev];
+                next[i] = true;
+                return next;
+              });
+            }, i * 150);
             obs.unobserve(e.target);
           }
         }),
         { threshold: 0.15 }
       );
       obs.observe(item);
+      observers.push(obs);
     });
+    return () => observers.forEach((o) => o.disconnect());
   }, []);
 
   return (
@@ -56,6 +66,7 @@ export default function Features() {
       <div style={{ maxWidth: 440, margin: "0 auto" }}>
         {feats.map((f, i) => {
           const d = lang === "kr" ? f.kr : f.jp;
+          const isShown = shown[i];
           return (
             <div
               key={i}
@@ -66,16 +77,15 @@ export default function Features() {
                 gap: 18,
                 alignItems: "flex-start",
                 position: "relative",
-                opacity: 0,
-                transform: "scale(.85)",
+                opacity: isShown ? 1 : 0,
+                transform: isShown ? "scale(1)" : "scale(.85)",
                 transition: "opacity .7s ease, transform .7s cubic-bezier(.4,0,.2,1)",
-                borderTop: i > 0 ? undefined : "none",
+                borderTop: i > 0 ? "1px solid transparent" : "none",
                 backgroundImage: i > 0 ? "linear-gradient(90deg,transparent,var(--bl),transparent)" : "none",
                 backgroundSize: "100% 1px",
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "top",
               }}
-              className="feat-item"
             >
               <div
                 style={{

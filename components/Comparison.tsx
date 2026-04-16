@@ -1,10 +1,8 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLang } from "@/hooks/useLang";
 import { useReveal } from "@/hooks/useReveal";
-import dynamic from "next/dynamic";
-
-const GyeolCard = dynamic(() => import("./GyeolCard"), { ssr: false });
+import GyeolCard from "./GyeolCard";
 
 const rivals = [
   {
@@ -26,37 +24,49 @@ export default function Comparison() {
   const sectionRef = useReveal<HTMLElement>();
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const dividerRef = useRef<HTMLDivElement>(null);
-  const lineRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
+  const [shownCards, setShownCards] = useState<boolean[]>([false, false, false]);
+  const [divShow, setDivShow] = useState(false);
+  const [lineShow, setLineShow] = useState(false);
+  const [textShow, setTextShow] = useState(false);
 
   useEffect(() => {
-    // Rival cards observer
-    cardsRef.current.forEach((card) => {
+    const observers: IntersectionObserver[] = [];
+
+    cardsRef.current.forEach((card, i) => {
       if (!card) return;
       const obs = new IntersectionObserver(
-        (entries) => entries.forEach((e) => { if (e.isIntersecting) card.classList.add("show"); }),
+        (entries) => entries.forEach((e) => {
+          if (e.isIntersecting) {
+            setShownCards((prev) => {
+              const next = [...prev];
+              next[i] = true;
+              return next;
+            });
+          }
+        }),
         { threshold: 0.2 }
       );
       obs.observe(card);
-      return () => obs.disconnect();
+      observers.push(obs);
     });
 
-    // Divider observer
     const div = dividerRef.current;
     if (div) {
       const obs = new IntersectionObserver(
         (entries) => entries.forEach((e) => {
           if (e.isIntersecting) {
-            div.style.opacity = "1";
-            setTimeout(() => { if (lineRef.current) lineRef.current.style.height = "40px"; }, 100);
-            setTimeout(() => { if (textRef.current) textRef.current.style.opacity = "1"; }, 500);
+            setDivShow(true);
+            setTimeout(() => setLineShow(true), 100);
+            setTimeout(() => setTextShow(true), 500);
           }
         }),
         { threshold: 0.2 }
       );
       obs.observe(div);
-      return () => obs.disconnect();
+      observers.push(obs);
     }
+
+    return () => observers.forEach((o) => o.disconnect());
   }, []);
 
   return (
@@ -69,6 +79,7 @@ export default function Comparison() {
       <div style={{ maxWidth: 400, margin: "40px auto 0" }}>
         {rivals.map((r, i) => {
           const d = lang === "kr" ? r.kr : r.jp;
+          const shown = shownCards[i];
           return (
             <div
               key={i}
@@ -76,12 +87,11 @@ export default function Comparison() {
               style={{
                 textAlign: "center",
                 padding: "48px 0",
-                opacity: 0,
-                transform: "scale(.92)",
+                opacity: shown ? 1 : 0,
+                transform: shown ? "scale(1)" : "scale(.92)",
                 transition: "all .7s cubic-bezier(.4,0,.2,1)",
                 borderTop: i > 0 ? "1px solid rgba(255,255,255,.04)" : "none",
               }}
-              className="comp-card"
             >
               <div style={{ font: "800 26px/1.3 var(--sans)", color: "var(--dp)", marginBottom: 14 }}>{d.name}</div>
               <div style={{ font: "500 13px/1 var(--sans)", color: "rgba(255,100,100,.6)", letterSpacing: 2 }}>{d.verdict}</div>
@@ -94,25 +104,23 @@ export default function Comparison() {
         })}
 
         {/* Divider */}
-        <div ref={dividerRef} style={{ textAlign: "center", padding: "32px 0", opacity: 0, transition: "opacity .6s ease" }}>
+        <div ref={dividerRef} style={{ textAlign: "center", padding: "32px 0", opacity: divShow ? 1 : 0, transition: "opacity .6s ease" }}>
           <div
-            ref={lineRef}
             style={{
               width: 1,
-              height: 0,
+              height: lineShow ? 40 : 0,
               background: "linear-gradient(to bottom,rgba(255,255,255,.04),rgba(255,255,255,.2),rgba(255,255,255,.04))",
               margin: "0 auto",
               transition: "height .8s ease",
             }}
           />
           <div
-            ref={textRef}
             style={{
               font: "500 14px/1 var(--serif)",
               color: "var(--ds)",
               letterSpacing: 3,
               marginTop: 14,
-              opacity: 0,
+              opacity: textShow ? 1 : 0,
               transition: "opacity .5s ease .3s",
             }}
           >
@@ -120,7 +128,7 @@ export default function Comparison() {
           </div>
         </div>
 
-        {/* Lanyard 3D Card */}
+        {/* 3D Card */}
         <GyeolCard />
       </div>
     </section>
