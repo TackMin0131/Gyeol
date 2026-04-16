@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>GYEOL 結 — 진짜를 만나다</title>
+<meta name="description" content="결혼만을 위한 한일 프리미엄 매칭 플랫폼.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@200;300;400;500;600;700;800;900&family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Serif+JP:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bk:#0A0A0A;--wh:#FAFAFA;
+  --dp:#FFFFFF;--ds:#B0B0B0;--dt:#8A8A8A;
+  --lp:#1A1A1A;--ls:#555;--lt:#767676;
+  --bl:#D4D4D4;--bd:rgba(255,255,255,.12);
+  --sans:'Gothic A1',sans-serif;--serif:'Noto Serif KR','Noto Serif JP',serif;--eng:'Playfair Display',serif;
+}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:var(--sans);color:var(--lp);background:var(--wh);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.5}
+::selection{background:var(--bk);color:var(--wh)}
+
+/* ── Nav ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:20px 28px;mix-blend-mode:difference;transition:all .4s cubic-bezier(.4,0,.2,1)}
+.nav *{color:var(--wh)!important}
+.nav-logo{font:700 14px/1 var(--eng);letter-spacing:6px}
+.nav-logo .kanji{font:400 13px/1 var(--serif);opacity:.5;margin-left:4px;letter-spacing:2px}
+.nav-right{display:flex;align-items:center;gap:10px}
+.lang-btn{background:none;border:1px solid rgba(255,255,255,.35);border-radius:20px;padding:6px 16px;font:500 13px/1 var(--sans);cursor:pointer;transition:all .3s}
+.lang-btn:hover{background:rgba(255,255,255,.12)}
+.nav-cta{display:none;padding:8px 22px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:var(--wh)!important;font:500 13px/1 var(--sans);letter-spacing:1px;text-decoration:none;border-radius:24px;transition:all .3s;white-space:nowrap}
+.nav-cta:hover{background:rgba(255,255,255,.2)!important}
+
+/* Scrolled state */
+.nav.scrolled{mix-blend-mode:normal;top:12px;left:16px;right:16px;background:rgba(10,10,10,.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:14px 20px;border-radius:40px;border:1px solid rgba(255,255,255,.06)}
+.nav.scrolled .lang-btn{display:none}
+.nav.scrolled .nav-cta{display:block}
+
+/* ── Hero ── */
+.hero{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:140px 24px 100px;background:var(--bk);color:var(--dp);position:relative;overflow:hidden}
+
+/* LineWaves */
+.line-waves{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.line-waves canvas{width:100%;height:100%;display:block}
+
+/* Hero content */
+.hero-content{position:relative;z-index:2;padding:0 8px;max-width:100%;width:100%}
+.hero-kanji{display:none}
+.hero-headline{font:800 30px/1.5 var(--sans);letter-spacing:-0.5px;margin-bottom:24px;opacity:0;animation:fadeUp .8s ease .5s forwards;max-width:340px;margin-left:auto;margin-right:auto;padding-top:4px}
+/* ShinyText */
+.hero-headline .shiny-text{display:inline;padding:4px 0;background:linear-gradient(120deg,var(--dp) 0%,var(--dp) 40%,rgba(255,255,255,.45) 50%,var(--dp) 60%,var(--dp) 100%);background-size:200% 100%;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shinySlide 3.5s ease-in-out infinite 2s}
+@keyframes shinySlide{
+  0%{background-position:200% 0}
+  100%{background-position:-200% 0}
+}
+.hero-sub{font:400 14px/1.65 var(--sans);color:var(--ds);max-width:300px;margin:0 auto 52px;opacity:0;animation:fadeUp .8s ease 1s forwards}
+.hero-cta{opacity:0;animation:fadeUp .8s ease 1.3s forwards;margin-bottom:32px}
+
+/* Gradient border button */
+.btn-glow{position:relative;display:inline-block;padding:17px 56px;font:600 13px/1 var(--eng);letter-spacing:3px;color:var(--dp);text-decoration:none;cursor:pointer;background:transparent;border:none;overflow:visible}
+.btn-glow::before{content:'';position:absolute;inset:-1px;border-radius:2px;padding:1px;background:linear-gradient(135deg,rgba(255,255,255,.5),rgba(255,255,255,.05),rgba(255,255,255,.5));mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude;-webkit-mask-composite:xor;transition:.4s;animation:borderGlow 3s ease-in-out infinite}
+.btn-glow:hover::before{background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.2),rgba(255,255,255,.8))}
+@keyframes borderGlow{
+  0%,100%{background:linear-gradient(135deg,rgba(255,255,255,.5),rgba(255,255,255,.05),rgba(255,255,255,.5))}
+  50%{background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.4),rgba(255,255,255,.1))}
+}
+
+.hero-count{font:400 13px/1 var(--sans);color:var(--dt);opacity:0;animation:fadeUp .8s ease 1.5s forwards;display:flex;align-items:baseline;justify-content:center;gap:6px}
+.hero-count strong{color:var(--dp);font-weight:700;font-size:18px;letter-spacing:1px}
+.hero-scroll{position:absolute;bottom:32px;left:0;right:0;text-align:center;font:300 13px/1 var(--eng);color:var(--dt);letter-spacing:4px;text-transform:uppercase;opacity:0;animation:fadeUp .8s ease 1.7s forwards}
+.hero-scroll span{display:inline-block;padding-left:4px}
+.hero-scroll::after{content:'';display:block;width:1px;height:24px;margin:10px auto 0;background:linear-gradient(to bottom,var(--dt),transparent);animation:scrollLine 2s ease infinite}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scrollLine{0%{opacity:.2;transform:scaleY(.6)}50%{opacity:.8;transform:scaleY(1)}100%{opacity:.2;transform:scaleY(.6)}}
+
+/* ── Gradient divider ── */
+.g-divider{height:1px;background:linear-gradient(90deg,transparent,var(--bl),transparent);margin:0}
+.g-divider-dark{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent);margin:0}
+
+/* ── Section commons ── */
+.s-label{font:600 13px/1 var(--eng);letter-spacing:4px;text-transform:uppercase;text-align:center;margin-bottom:16px}
+.s-title{font:700 24px/1.35 var(--sans);text-align:center;margin-bottom:24px}
+
+/* ── Pain ── */
+.pain{padding:100px 36px;background:var(--wh)}
+.pain .s-label{color:var(--lt)}
+.pain .s-title{color:var(--lp)}
+.pain-grid{max-width:440px;margin:48px auto 0}
+.pain-item{padding:28px 0;position:relative}
+/* Gradient border between items */
+.pain-item + .pain-item::before{content:'';display:block;position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--bl),transparent)}
+.pain-item:first-child::before{content:'';display:block;position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--bl),transparent)}
+.pain-num{font:300 13px/1 var(--sans);color:var(--lt);letter-spacing:3px;margin-bottom:16px}
+.pain-name{font:700 17px/1.35 var(--sans);color:var(--lp);margin-bottom:16px}
+.pain-desc{font:400 13px/1.7 var(--sans);color:var(--ls)}
+.pain-desc strong{color:var(--lp);font-weight:600}
+.pain-bottom{text-align:center;margin-top:72px}
+.pain-bottom p{font:600 22px/1.4 var(--serif);color:var(--lp)}
+.pain-bottom small{font:400 13px/1.5 var(--sans);color:var(--lt);display:block;margin-top:16px}
+
+/* ── Comparison ── */
+.comp{padding:100px 36px;background:var(--bk);color:var(--dp);overflow:hidden}
+.comp .s-label{color:var(--dt)}
+.comp .s-title{color:var(--dp)}
+.comp-container{max-width:400px;margin:40px auto 0}
+
+/* Rival cards - fade in + zoom in, stay visible */
+.comp-card{text-align:center;padding:48px 0;opacity:0;transform:scale(.92);transition:all .7s cubic-bezier(.4,0,.2,1)}
+.comp-card.show{opacity:1;transform:scale(1)}
+.comp-card-name{font:800 26px/1.3 var(--sans);color:var(--dp);margin-bottom:14px}
+.comp-card-verdict{font:500 13px/1 var(--sans);color:rgba(255,100,100,.6);letter-spacing:2px}
+.comp-card-desc{font:400 13px/1.7 var(--sans);color:var(--dt);margin-top:18px}
+.comp-card + .comp-card{border-top:1px solid rgba(255,255,255,.04)}
+
+/* Divider line between rivals and GYEOL */
+.comp-divider{text-align:center;padding:32px 0;opacity:0;transition:opacity .6s ease}
+.comp-divider.show{opacity:1}
+.comp-divider-line{width:1px;height:0;background:linear-gradient(to bottom,rgba(255,255,255,.04),rgba(255,255,255,.2),rgba(255,255,255,.04));margin:0 auto;transition:height .8s ease}
+.comp-divider-line.grow{height:40px}
+.comp-divider-text{font:500 14px/1 var(--serif);color:var(--ds);letter-spacing:3px;margin-top:14px;opacity:0;transition:opacity .5s ease .3s}
+.comp-divider-text.show{opacity:1}
+
+/* GYEOL card */
+.comp-gyeol{max-width:400px;margin:0 auto;padding:36px 28px;position:relative;opacity:0;transform:translateY(24px);transition:all .7s cubic-bezier(.4,0,.2,1);background:rgba(255,255,255,.05);border-radius:4px}
+.comp-gyeol.visible{opacity:1;transform:translateY(0)}
+.comp-gyeol::before{content:'';position:absolute;inset:-1px;border-radius:4px;padding:1px;background:linear-gradient(180deg,rgba(255,255,255,.15),rgba(255,255,255,.02),rgba(255,255,255,.15));mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude;-webkit-mask-composite:xor;animation:cardGlow 4s ease-in-out infinite;pointer-events:none}
+@keyframes cardGlow{0%,100%{opacity:.4}50%{opacity:1}}
+.comp-gyeol-top{text-align:center;margin-bottom:28px}
+.comp-gyeol-kanji{font:300 32px/1 var(--serif);color:var(--dp)}
+.comp-gyeol-name{font:800 18px/1 var(--eng);letter-spacing:6px;color:var(--dp);margin-top:14px}
+.comp-gyeol-row{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-top:1px solid rgba(255,255,255,.06);opacity:0;transform:translateY(12px);transition:opacity .5s ease,transform .5s ease}
+.comp-gyeol-row.visible{opacity:1;transform:translateY(0)}
+.comp-gyeol-row:nth-child(3){transition-delay:.05s}
+.comp-gyeol-row:nth-child(4){transition-delay:.1s}
+.comp-gyeol-row:nth-child(5){transition-delay:.15s}
+.comp-gyeol-row:nth-child(6){transition-delay:.2s}
+.comp-gyeol-row:nth-child(7){transition-delay:.25s}
+.comp-gyeol-row:nth-child(8){transition-delay:.3s}
+.comp-gyeol-label{font:500 13px/1 var(--sans);color:var(--ds);display:flex;align-items:center;gap:8px}
+.row-icon{width:16px;height:16px;flex-shrink:0;color:var(--dt)}
+.comp-gyeol-value{font:700 13px/1 var(--sans);color:var(--dp);text-align:right}
+
+.comp-bottom{text-align:center;margin-top:48px}
+.comp-bottom p{font:400 15px/1.6 var(--sans);color:var(--ds)}
+.comp-bottom strong{color:var(--dp);font-weight:700}
+
+/* ── Features ── */
+.feat{padding:100px 36px;background:var(--wh)}
+.feat .s-label{color:var(--lt)}
+.feat .s-title{color:var(--lp);margin-bottom:56px}
+.feat-grid{max-width:440px;margin:0 auto}
+.feat-item{padding:28px 0;display:flex;gap:18px;align-items:flex-start;position:relative;opacity:0;transform:scale(.85);transition:opacity .7s ease,transform .7s cubic-bezier(.4,0,.2,1)}
+.feat-item.visible{opacity:1;transform:scale(1)}
+.feat-item + .feat-item::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--bl),transparent)}
+.feat-icon{min-width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid var(--bl);border-radius:8px;margin-top:2px}
+.feat-icon svg{width:20px;height:20px;stroke:var(--ls);stroke-width:1.5;fill:none}
+.feat-body h3{font:700 14px/1.4 var(--sans);color:var(--lp);margin-bottom:12px}
+.feat-body p{font:400 13px/1.65 var(--sans);color:var(--ls)}
+
+/* ── Founder ── */
+.founder{padding:100px 36px;background:var(--bk);color:var(--dp);position:relative}
+.founder-inner{max-width:360px;margin:0 auto}
+.founder-label{font:600 13px/1 var(--eng);letter-spacing:4px;text-transform:uppercase;color:var(--dt);margin-bottom:40px}
+.founder-body{font:300 15px/2 var(--sans);color:var(--ds)}
+.founder-body em{font-style:normal;color:var(--dp);font-weight:500}
+.founder-body .break{display:block;height:20px}
+.founder-sign{margin-top:40px;padding-top:24px;border-top:1px solid rgba(255,255,255,.06)}
+.founder-sign-name{font:700 15px/1 var(--sans);color:var(--dp)}
+.founder-sign-title{font:400 13px/1 var(--sans);color:var(--dt);margin-top:6px}
+
+/* ── Register ── */
+.reg{padding:80px 36px 100px;background:var(--bk);color:var(--dp);text-align:center;position:relative;overflow:hidden}
+.reg::after{content:'結';position:absolute;font:700 50vw/1 var(--serif);color:rgba(255,255,255,.012);bottom:-15%;right:-5%;pointer-events:none;user-select:none}
+.reg-rays{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+/* Volumetric LightRays - wide beams from TOP */
+.reg-rays::before,.reg-rays::after{content:'';position:absolute;top:0;left:50%;width:200vmax;height:200vmax;transform-origin:top center;transform:translateX(-50%);animation:raysRotate 25s linear infinite}
+.reg-rays::before{
+  background:conic-gradient(
+    from 0deg at 50% 0%,
+    transparent 0deg,
+    rgba(255,255,255,.05) 4deg,
+    rgba(255,255,255,.14) 12deg,
+    rgba(255,255,255,.05) 22deg,
+    transparent 30deg,
+    transparent 55deg,
+    rgba(255,255,255,.04) 60deg,
+    rgba(255,255,255,.12) 72deg,
+    rgba(255,255,255,.04) 84deg,
+    transparent 92deg,
+    transparent 130deg,
+    rgba(255,255,255,.05) 136deg,
+    rgba(255,255,255,.15) 150deg,
+    rgba(255,255,255,.05) 164deg,
+    transparent 172deg,
+    transparent 210deg,
+    rgba(255,255,255,.04) 216deg,
+    rgba(255,255,255,.11) 228deg,
+    rgba(255,255,255,.04) 240deg,
+    transparent 248deg,
+    transparent 295deg,
+    rgba(255,255,255,.05) 302deg,
+    rgba(255,255,255,.1) 314deg,
+    rgba(255,255,255,.05) 326deg,
+    transparent 334deg,
+    transparent 360deg
+  );
+  filter:blur(10px);
+  opacity:1;
+}
+.reg-rays::after{
+  background:conic-gradient(
+    from 180deg at 50% 0%,
+    transparent 0deg,
+    rgba(255,255,255,.04) 6deg,
+    rgba(255,255,255,.1) 18deg,
+    rgba(255,255,255,.04) 30deg,
+    transparent 40deg,
+    transparent 80deg,
+    rgba(255,255,255,.05) 88deg,
+    rgba(255,255,255,.12) 102deg,
+    rgba(255,255,255,.05) 116deg,
+    transparent 126deg,
+    transparent 175deg,
+    rgba(255,255,255,.04) 184deg,
+    rgba(255,255,255,.09) 198deg,
+    rgba(255,255,255,.04) 212deg,
+    transparent 222deg,
+    transparent 270deg,
+    rgba(255,255,255,.05) 280deg,
+    rgba(255,255,255,.11) 294deg,
+    rgba(255,255,255,.05) 308deg,
+    transparent 318deg,
+    transparent 360deg
+  );
+  filter:blur(14px);
+  opacity:.85;
+  animation-duration:35s;
+  animation-direction:reverse;
+}
+@keyframes raysRotate{to{transform:translateX(-50%) rotate(360deg)}}
+/* Top glow origin */
+.reg-glow{position:absolute;top:0;left:50%;transform:translateX(-50%);width:120%;height:30%;background:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.15),transparent 65%);pointer-events:none;z-index:1;animation:glowBreath 6s ease-in-out infinite}
+@keyframes glowBreath{0%,100%{opacity:.7;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.15)}}
+.reg .s-title{color:var(--dp);margin-bottom:36px;position:relative;z-index:2}
+
+.reg-urgency{display:inline-flex;flex-direction:column;align-items:center;padding:16px 36px;margin-bottom:28px;position:relative;z-index:2}
+.reg-urgency::before{content:'';position:absolute;inset:-1px;padding:1px;background:linear-gradient(135deg,rgba(255,255,255,.15),rgba(255,255,255,.03),rgba(255,255,255,.15));mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude;-webkit-mask-composite:xor;animation:borderGlow 3s ease-in-out infinite}
+.reg-urgency .num{font:800 22px/1.3 var(--sans);color:var(--dp)}
+.reg-urgency .label{font:400 13px/1 var(--sans);color:var(--dt);letter-spacing:1px;margin-top:10px}
+
+.reg-benefits{max-width:340px;margin:0 auto 28px;text-align:center;position:relative;z-index:2}
+.reg-benefit{padding:14px 0;font:500 13px/1.6 var(--sans);color:var(--ds)}
+.reg-benefit:first-child{padding:16px 0}
+.reg-benefit + .reg-benefit{border-top:1px solid rgba(255,255,255,.06)}
+.benefit-price{font:700 16px/1 var(--sans);color:var(--dt);text-decoration:line-through}
+.benefit-arrow{color:var(--dt);margin:0 8px;font-size:14px}
+.benefit-free{font:800 18px/1 var(--sans);color:var(--dp)}
+.benefit-desc{font:500 13px/1 var(--sans);color:var(--ds)}
+
+.reg-form{max-width:340px;margin:0 auto;position:relative;z-index:2}
+
+/* MUI-style floating label input */
+.input-wrap{position:relative;margin-bottom:20px}
+.input-wrap input{width:100%;padding:20px 16px 8px;border:1px solid var(--bd);background:transparent;color:var(--dp);font:400 14px/1 var(--sans);outline:none;transition:.3s}
+.input-wrap input:focus{border-color:rgba(255,255,255,.5)}
+.input-wrap label{position:absolute;left:16px;top:50%;transform:translateY(-50%);font:400 13px/1 var(--sans);color:var(--dt);pointer-events:none;transition:all .2s ease}
+.input-wrap input:focus + label,
+.input-wrap input:not(:placeholder-shown) + label{top:10px;transform:translateY(0);font-size:10px;color:var(--ds);letter-spacing:1px}
+
+/* Gender selection */
+.gender-label{font:500 13px/1 var(--sans);color:var(--ds);margin-bottom:10px;letter-spacing:1px}
+.gender-row{display:flex;gap:10px;margin-bottom:16px}
+.g-btn{flex:1;padding:16px 12px;border:1px solid var(--bd);background:transparent;cursor:pointer;transition:.3s;text-align:center;display:flex;align-items:center;justify-content:center;gap:10px}
+.g-btn .flag{font-size:18px;line-height:1}
+.g-btn .g-label{font:600 13px/1 var(--sans);color:var(--dt);transition:.3s}
+.g-btn:hover{border-color:rgba(255,255,255,.3)}
+.g-btn.active{border-color:var(--dp);background:rgba(255,255,255,.05)}
+.g-btn.active .g-label{color:var(--dp)}
+.gender-note{font:400 13px/1.5 var(--sans);color:rgba(255,255,255,.2);text-align:center;margin-bottom:24px}
+.gender-note em{font-style:normal;color:var(--dt)}
+
+.reg-submit{width:100%;padding:20px;border:none;background:var(--wh);color:var(--bk);font:700 13px/1 var(--sans);letter-spacing:3px;cursor:pointer;transition:.3s;position:relative;overflow:visible}
+.reg-submit::before{content:'';position:absolute;inset:-2px;pointer-events:none;background:conic-gradient(from var(--glow-angle,0deg) at 50% 50%,transparent 0%,rgba(255,255,255,.5) 4%,transparent 8%,transparent 100%);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;padding:2px}
+.reg-submit:hover{opacity:.9}
+.reg-submit:disabled{opacity:.35;cursor:not-allowed}
+.reg-submit:disabled::before{opacity:0}
+.reg-note{margin-top:32px;font:400 13px/1.6 var(--sans);color:var(--dt);max-width:300px;margin-left:auto;margin-right:auto;position:relative;z-index:2}
+
+.success{display:none;padding:40px 0;position:relative;z-index:2}
+.success h3{font:700 22px/1.35 var(--sans);margin-bottom:20px}
+.success p{font:400 14px/1.6 var(--sans);color:var(--ds)}
+.success strong{color:var(--dp);font-weight:700;font-size:20px}
+
+/* ── Footer ── */
+.footer{padding:48px 28px 40px;text-align:center;background:var(--bk);border-top:1px solid rgba(255,255,255,.04)}
+.footer-logo{font:700 13px/1 var(--eng);color:var(--dt);letter-spacing:6px;margin-bottom:24px}
+.footer-info{font:400 13px/1.7 var(--sans);color:rgba(255,255,255,.18);max-width:320px;margin:0 auto}
+.footer-info span{display:inline}
+.footer-info span + span::before{content:' · ';color:rgba(255,255,255,.1)}
+.footer-copy{font:400 13px/1 var(--sans);color:rgba(255,255,255,.12);margin-top:20px}
+
+/* ── Scroll reveal ── */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}
+
+/* ── Responsive ── */
+@media(min-width:640px){
+  .hero-headline{font-size:48px;max-width:460px}
+  .pain,.comp,.feat,.reg{padding:140px 48px}
+  .s-title{font-size:28px}
+  .hero{padding:100px 48px 80px}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="mainNav">
+  <div class="nav-logo">GYEOL<span class="kanji">結</span></div>
+  <div class="nav-right">
+    <button class="lang-btn" onclick="toggleLang()" id="langBtn">日本語</button>
+    <a href="#register" class="nav-cta" data-kr="사전등록" data-jp="事前登録"></a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="line-waves"><canvas id="waveCanvas"></canvas></div>
+  <div class="hero-content">
+    <h1 class="hero-headline" id="heroText" data-kr="결국 만나야 할 사람" data-jp="結局、出会うべき人"></h1>
+    <p class="hero-sub" data-kr="한국 남성 × 일본 여성<br>검증된 사람만, 결혼만을 위한 매칭." data-jp="韓国人男性 × 日本人女性<br>検証された人だけ、結婚だけのマッチング。"></p>
+    <div class="hero-cta">
+      <a href="#register" class="btn-glow" data-kr="사전등록" data-jp="事前登録"></a>
+    </div>
+    <div class="hero-count">
+      <span data-kr="오늘" data-jp="本日"></span> <strong id="counter">0</strong><span data-kr="명 등록" data-jp="名登録"></span>
+    </div>
+  </div>
+  <div class="hero-scroll"><span>scroll</span></div>
+</section>
+
+<div class="g-divider"></div>
+
+<!-- ── PAIN ── -->
+<section class="pain">
+  <div class="s-label reveal">Pain Points</div>
+  <div class="s-title reveal" data-kr="당신이 겪어온 것들." data-jp="あなたが経験してきたこと。"></div>
+  <div class="pain-grid">
+    <div class="pain-item reveal">
+      <div class="pain-num">01</div>
+      <div class="pain-name" data-kr="데이팅앱" data-jp="マッチングアプリ"></div>
+      <div class="pain-desc" data-kr="스와이프, 매칭, 안 읽힘, 유령.<br><strong>가벼운 만남의 끝없는 반복.</strong><br>인연을 기대했지만,<br>돌아오는 건 늘 실망뿐이었다." data-jp="スワイプ、マッチ、既読スルー。<br><strong>軽い出会いの終わりなき繰り返し。</strong><br>運命を期待しても、<br>戻ってくるのはいつも失望だけだった。"></div>
+    </div>
+    <div class="pain-item reveal d1">
+      <div class="pain-num">02</div>
+      <div class="pain-name" data-kr="지인 소개팅" data-jp="友人の紹介"></div>
+      <div class="pain-desc" data-kr="좋은 사람이지만,<br>기회가 <strong>1년에 몇 번뿐.</strong><br>마음에 들어도 다음이 없다." data-jp="いい人だけど、<br>機会は<strong>年に数回だけ。</strong><br>気に入っても次がない。"></div>
+    </div>
+    <div class="pain-item reveal d2">
+      <div class="pain-num">03</div>
+      <div class="pain-name" data-kr="결혼정보회사" data-jp="結婚相談所"></div>
+      <div class="pain-desc" data-kr="가입비 <strong>500만 원 ~ 1,000만 원.</strong><br>조건표의 한 줄로 평가당하는 기분.<br>진심은 어디에도 없었다." data-jp="入会金<strong>数十万円〜百万円。</strong><br>条件表の一行で評価される感覚。<br>真心はどこにもなかった。"></div>
+    </div>
+  </div>
+  <div class="pain-bottom reveal">
+    <p data-kr="그래서 만들었습니다." data-jp="だから、作りました。"></p>
+    <small data-kr="당신이 주인공인 결혼 매칭." data-jp="あなたが主役の結婚マッチング。"></small>
+  </div>
+</section>
+
+<div class="g-divider"></div>
+
+<!-- ── COMPARISON ── -->
+<section class="comp" id="compSection">
+  <div class="s-label reveal">Comparison</div>
+  <div class="s-title reveal" data-kr="같은 돈, 다른 결과" data-jp="同じお金、違う結果"></div>
+
+  <div class="comp-container">
+    <div class="comp-card" id="card1">
+      <div class="comp-card-name" data-kr="데이팅앱" data-jp="マッチングアプリ"></div>
+      <div class="comp-card-verdict" data-kr="가벼움" data-jp="軽い"></div>
+      <div class="comp-card-desc" data-kr="스와이프의 반복. 인증도 없고, 안전장치도 없다.<br>월 1~3만 원이면 시작할 수 있지만,<br>돌아오는 건 가벼운 만남뿐이었다." data-jp="スワイプの繰り返し。認証もなく、安全もない。<br>月¥1~3千で始められるが、<br>戻ってくるのは軽い出会いだけだった。"></div>
+    </div>
+
+    <div class="comp-card" id="card2">
+      <div class="comp-card-name" data-kr="소개팅" data-jp="友人の紹介"></div>
+      <div class="comp-card-verdict" data-kr="기회 부족" data-jp="機会不足"></div>
+      <div class="comp-card-desc" data-kr="좋은 사람이지만 기회가 1년에 몇 번뿐.<br>마음에 들어도 다음이 없고,<br>안전장치도 없다." data-jp="いい人だけど機会は年に数回だけ。<br>気に入っても次がなく、<br>安全もない。"></div>
+    </div>
+
+    <div class="comp-card" id="card3">
+      <div class="comp-card-name" data-kr="결혼정보회사" data-jp="結婚相談所"></div>
+      <div class="comp-card-verdict" data-kr="고비용" data-jp="高費用"></div>
+      <div class="comp-card-desc" data-kr="가입비만 500만~1,000만 원.<br>조건 위주 매칭. 진심이 아닌 사업 대상으로 느껴졌다.<br>그마저도 안전장치는 없다." data-jp="入会金だけで数十万〜百万円。<br>条件中心のマッチング。真心ではなくビジネスの対象。<br>それでも安全はない。"></div>
+    </div>
+
+    <!-- Divider -->
+    <div class="comp-divider" id="compDivider">
+      <div class="comp-divider-line" id="compDivLine"></div>
+      <div class="comp-divider-text" id="compDivText" data-kr="그래서, 結" data-jp="だから、結"></div>
+    </div>
+
+    <!-- GYEOL -->
+    <div class="comp-gyeol" id="compGyeol">
+      <div class="comp-gyeol-top">
+        <div class="comp-gyeol-kanji">結</div>
+        <div class="comp-gyeol-name">GYEOL</div>
+      </div>
+      <div class="comp-gyeol-row">
+        <span class="comp-gyeol-label"><svg class="row-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0016.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 002 8.5c0 2.3 1.5 4.05 3 5.5l7 7z"/></svg><span data-kr="목적" data-jp="目的"></span></span>
+        <span class="comp-gyeol-value" data-kr="결혼 Only" data-jp="結婚 Only"></span>
+      </div>
+      <div class="comp-gyeol-row">
+        <span class="comp-gyeol-label"><svg class="row-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg><span data-kr="신원확인" data-jp="身元確認"></span></span>
+        <span class="comp-gyeol-value" data-kr="5단계 인증" data-jp="5段階認証"></span>
+      </div>
+      <div class="comp-gyeol-row">
+        <span class="comp-gyeol-label"><svg class="row-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><span data-kr="비용" data-jp="費用"></span></span>
+        <span class="comp-gyeol-value" data-kr="월 19만~" data-jp="月¥1.9万~"></span>
+      </div>
+      <div class="comp-gyeol-row">
+        <span class="comp-gyeol-label"><svg class="row-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg><span data-kr="매칭" data-jp="マッチング"></span></span>
+        <span class="comp-gyeol-value" data-kr="가치관 기반 주 3~5명" data-jp="価値観ベース 週3~5人"></span>
+      </div>
+      <div class="comp-gyeol-row">
+        <span class="comp-gyeol-label"><svg class="row-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg><span data-kr="안전" data-jp="安全"></span></span>
+        <span class="comp-gyeol-value" data-kr="만남~귀가 보호" data-jp="面会〜帰宅保護"></span>
+      </div>
+      <div class="comp-gyeol-row">
+        <span class="comp-gyeol-label"><svg class="row-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg><span data-kr="번역" data-jp="翻訳"></span></span>
+        <span class="comp-gyeol-value" data-kr="실시간 한↔일" data-jp="リアルタイム韓↔日"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="g-divider"></div>
+
+<!-- ── FEATURES ── -->
+<section class="feat">
+  <div class="s-label reveal">Why GYEOL</div>
+  <div class="s-title reveal" data-kr="왜 GYEOL인가." data-jp="なぜGYEOLなのか。"></div>
+  <div class="feat-grid">
+    <div class="feat-item" data-feat="0">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+      </div>
+      <div class="feat-body">
+        <h3 data-kr="5단계 신원 인증" data-jp="5段階の身元認証"></h3>
+        <p data-kr="본인확인, 안면인식, 직업·연봉,<br>학력, 미혼 증명까지.<br>검증된 사람만 만납니다." data-jp="本人確認、顔認証、職業・年収、<br>学歴、独身証明まで。<br>検証された方だけ。"></p>
+      </div>
+    </div>
+    <div class="feat-item" data-feat="1">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0016.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 002 8.5c0 2.3 1.5 4.05 3 5.5l7 7z"/></svg>
+      </div>
+      <div class="feat-body">
+        <h3 data-kr="결혼 의향 서약" data-jp="結婚意向の誓約"></h3>
+        <p data-kr="가입 시 결혼 전제 서약 필수.<br>캐주얼 목적은 가입 불가.<br>모든 사람이 진지합니다." data-jp="登録時に結婚前提の誓約が必須。<br>カジュアルな目的では登録不可。<br>全員が真剣です。"></p>
+      </div>
+    </div>
+    <div class="feat-item" data-feat="2">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+      </div>
+      <div class="feat-body">
+        <h3 data-kr="실시간 한↔일 번역" data-jp="リアルタイム韓↔日翻訳"></h3>
+        <p data-kr="채팅은 자동 번역.<br>원문과 번역문이 동시 표시되어,<br>언어가 달라도 진심이 전달됩니다." data-jp="チャットは自動翻訳。<br>原文と翻訳文が同時表示。<br>言葉が違っても真心が伝わります。"></p>
+      </div>
+    </div>
+    <div class="feat-item" data-feat="3">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div class="feat-body">
+        <h3 data-kr="만남부터 귀가까지, 안전" data-jp="出会いから帰宅まで、安全"></h3>
+        <p data-kr="오프라인 만남 등록,<br>만남 중 안전 체크, 귀가 확인.<br>당신의 안전을 끝까지 지킵니다." data-jp="オフラインの面会登録、<br>安全チェック、帰宅確認。<br>あなたの安全を最後まで守ります。"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOUNDER ── -->
+<section class="founder">
+  <div class="founder-inner">
+    <div class="founder-label reveal">From the Founder</div>
+    <div class="founder-body reveal">
+      <span data-kr="한국에서 일본 여성을 만날 방법은<br>거의 없었습니다.<span class='break'></span>있다 해도 브로커를 통해야 했고,<br>상대가 어떤 사람인지 알 수 없었고,<br>수백만 원을 내고도 불안했습니다.<span class='break'></span>일본에서 한국 남성을 만나고 싶은<br>여성들도 마찬가지였습니다.<br>한류를 좋아하는 것과<br>신뢰할 수 있는 사람을 만나는 것은<br>완전히 다른 문제니까요.<span class='break'></span>그래서 <em>結</em>을 만들었습니다.<span class='break'></span>한국 남성과 일본 여성,<br>서로의 진심이 검증된 사람끼리만.<br>언어가 달라도 대화가 되도록.<br>국경을 넘는 만남이 안전하도록.<span class='break'></span>두 나라의 좋은 사람들이<br><em>결국 만나야 할 사람을 만나는 곳.</em><br>그게 結입니다."
+      data-jp="韓国で日本人女性と出会う方法は<br>ほとんどありませんでした。<span class='break'></span>あったとしてもブローカーを通すしかなく、<br>相手がどんな人かわからず、<br>数百万ウォンを払っても不安でした。<span class='break'></span>日本で韓国人男性と出会いたい<br>女性たちも同じでした。<br>韓流が好きなことと<br>信頼できる人に出会うことは<br>まったく別の問題ですから。<span class='break'></span>だから<em>結</em>を作りました。<span class='break'></span>韓国人男性と日本人女性、<br>お互いの真心が検証された人だけ。<br>言葉が違っても会話ができるように。<br>国境を超える出会いが安全であるように。<span class='break'></span>二つの国の素敵な人たちが<br><em>結局、出会うべき人に出会う場所。</em><br>それが結です。"></span>
+    </div>
+    <div class="founder-sign reveal">
+      <div class="founder-sign-name">김택민</div>
+      <div class="founder-sign-title" data-kr="結 대표" data-jp="結 代表"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REGISTER ── -->
+<section class="reg" id="register">
+  <div class="reg-glow"></div>
+  <div class="reg-rays"></div>
+
+  <div class="s-title reveal" data-kr="지금 등록하면,<br>가장 먼저 만납니다." data-jp="今登録すれば、<br>最初に出会えます。"></div>
+
+  <div class="reg-urgency reveal">
+    <div class="num" data-kr="선착순 500명" data-jp="先着500名"></div>
+    <div class="label" data-kr="등록 완료 시 조기 마감" data-jp="定員に達し次第、受付終了"></div>
+  </div>
+
+  <div class="reg-benefits reveal">
+    <div class="reg-benefit"><span class="benefit-price" data-kr="₩390,000/월" data-jp="プレミアムプラン"></span><span class="benefit-arrow">&rarr;</span><span class="benefit-free" data-kr="1개월 무료" data-jp="3ヶ月無料"></span></div>
+    <div class="reg-benefit"><span class="benefit-desc" data-kr="런칭 당일 1순위 프로필 노출" data-jp="ローンチ当日 最優先プロフィール表示"></span></div>
+    <div class="reg-benefit"><span class="benefit-desc" data-kr="사전 인증 → 즉시 매칭" data-jp="事前認証 → 即時マッチング"></span></div>
+  </div>
+
+  <div class="reg-form reveal" id="formArea">
+    <div class="input-wrap">
+      <input type="email" id="emailInput" placeholder=" " required>
+      <label data-kr="이메일 주소" data-jp="メールアドレス"></label>
+    </div>
+
+    <div class="gender-label" data-kr="나는" data-jp="私は"></div>
+    <div class="gender-row">
+      <div class="g-btn" onclick="selectGender(this,'M')">
+        <span class="flag" style="font:700 14px/1 var(--sans)">KR</span>
+        <span class="g-label" data-kr="한국 남성" data-jp="韓国人男性"></span>
+      </div>
+      <div class="g-btn" onclick="selectGender(this,'F')">
+        <span class="flag" style="font:700 14px/1 var(--sans)">JP</span>
+        <span class="g-label" data-kr="일본 여성" data-jp="日本人女性"></span>
+      </div>
+    </div>
+    <div class="gender-note" data-kr="<em>한국 남성 × 일본 여성</em> 매칭에 특화된 서비스입니다" data-jp="<em>韓国人男性 × 日本人女性</em> マッチングに特化したサービスです"></div>
+
+    <button class="reg-submit" id="submitBtn" onclick="submitForm()" disabled data-kr="사전등록" data-jp="事前登録"></button>
+  </div>
+  <div class="success" id="successArea">
+    <h3 data-kr="등록이 완료되었습니다." data-jp="登録が完了しました。"></h3>
+    <p><strong id="successNum"></strong><span data-kr="번째 회원." data-jp="番目の会員。"></span><br><br><span data-kr="런칭 시 가장 먼저 찾아뵙겠습니다." data-jp="ローンチ時に最初にお届けします。"></span></p>
+  </div>
+  <div class="reg-note reveal" data-kr="사전등록은 무료이며, 결제는 발생하지 않습니다." data-jp="事前登録は無料で、決済は発生しません。"></div>
+</section>
+
+<footer class="footer reveal">
+  <div class="footer-logo">GYEOL <span style="font:400 13px/1 var(--serif);opacity:.4;letter-spacing:2px">結</span></div>
+  <div class="footer-info">
+    <span>상호 결</span>
+    <span>대표 김택민</span><br>
+    <span>사업자등록번호 493-14-02639</span><br>
+    <span>경기도 광명시 성채로 37</span><br>
+    <span>contact@gyeol.com</span>
+  </div>
+  <div class="footer-copy">© 2026 GYEOL. All rights reserved.</div>
+</footer>
+
+<script>
+// ── BorderGlow rotation on register button ──
+const regBtn = document.querySelector('.reg-submit');
+let glowAngle = 0;
+function animateGlow() {
+  glowAngle = (glowAngle + 1) % 360;
+  if(regBtn) regBtn.style.setProperty('--glow-angle', glowAngle + 'deg');
+  requestAnimationFrame(animateGlow);
+}
+animateGlow();
+
+// ── Nav scroll state ──
+const mainNav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 80) mainNav.classList.add('scrolled');
+  else mainNav.classList.remove('scrolled');
+}, { passive: true });
+
+// ── Form ──
+let sg='';
+const ei=document.getElementById('emailInput');
+function selectGender(el,g){sg=g;document.querySelectorAll('.g-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');checkForm()}
+ei.addEventListener('input',checkForm);
+function checkForm(){document.getElementById('submitBtn').disabled=!(ei.value.includes('@')&&sg)}
+
+// ★ Google Sheets Apps Script URL — 여기에 배포 URL 붙여넣기
+const SHEET_URL='YOUR_APPS_SCRIPT_URL_HERE';
+
+async function submitForm(){
+  const email=ei.value;if(!email||!sg)return;
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true;
+  btn.textContent=lang==='kr'?'등록 중...':'登録中...';
+  try{
+    const res=await fetch(SHEET_URL,{method:'POST',body:JSON.stringify({email,gender:sg,lang}),headers:{'Content-Type':'text/plain'}});
+    const data=await res.json();
+    if(data.result==='duplicate'){
+      alert(lang==='kr'?'이미 등록된 이메일입니다.':'すでに登録済みのメールです。');
+      btn.disabled=false;
+      btn.textContent=lang==='kr'?'사전등록 완료':'事前登録を完了';
+      return;
+    }
+    document.getElementById('formArea').style.display='none';
+    document.getElementById('successArea').style.display='block';
+    document.getElementById('successNum').textContent=data.count;
+  }catch(err){
+    // Apps Script 미연결 시 로컬 폴백
+    document.getElementById('formArea').style.display='none';
+    document.getElementById('successArea').style.display='block';
+    document.getElementById('successNum').textContent=TARGET;
+  }
+  initLang();
+}
+
+// ── Language ──
+let lang='kr';
+const heroTextEl=document.getElementById('heroText');
+
+function toggleLang(){lang=lang==='kr'?'jp':'kr';document.getElementById('langBtn').textContent=lang==='kr'?'日本語':'한국어';sg='';document.querySelectorAll('.g-btn').forEach(b=>b.classList.remove('active'));initLang()}
+function initLang(){
+  document.querySelectorAll('[data-kr]').forEach(el=>{
+    if(el.id==='heroText')return;
+    const v=el.getAttribute('data-'+lang);
+    if(v)el.innerHTML=v;
+  });
+  // ShinyText on headline
+  const t=heroTextEl.getAttribute('data-'+lang);
+  heroTextEl.innerHTML=`<span class="shiny-text">${t}</span>`;
+  document.getElementById('emailInput').placeholder=' ';
+  // Reorder gender buttons by language
+  const gRow=document.querySelector('.gender-row');
+  const btns=gRow.querySelectorAll('.g-btn');
+  if(lang==='jp'){gRow.appendChild(btns[0]);}// JP female first
+  else{gRow.appendChild(btns[1]);}// KR male first
+  // Default gender by language
+  const newBtns=document.querySelectorAll('.g-btn');
+  if(!sg){
+    if(lang==='kr'){newBtns[0].classList.add('active');sg='M';}
+    else{newBtns[0].classList.add('active');sg='F';}
+    checkForm();
+  }
+}
+initLang();
+
+// ── Counter ──
+const TARGET=20+Math.floor(Math.random()*18);
+let cur=0;
+function animC(){const el=document.getElementById('counter');if(cur<TARGET){cur++;el.textContent=cur;requestAnimationFrame(animC)}}
+setTimeout(animC,1200);
+
+// ── Scroll Reveal ──
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.1,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// ── Feature items: sequential zoom-in ──
+document.querySelectorAll('.feat-item').forEach(item => {
+  const delay = parseInt(item.dataset.feat || 0) * 150;
+  const fObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        setTimeout(() => item.classList.add('visible'), delay);
+        fObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  fObs.observe(item);
+});
+
+// ── Comparison: fade-in zoom-in, cards stay visible ──
+document.querySelectorAll('.comp-card').forEach(card => {
+  const cObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) card.classList.add('show');
+    });
+  }, { threshold: 0.2 });
+  cObs.observe(card);
+});
+
+const compDivider = document.getElementById('compDivider');
+const compDivLine = document.getElementById('compDivLine');
+const compDivText = document.getElementById('compDivText');
+const compGyeol = document.getElementById('compGyeol');
+
+const divObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      compDivider.classList.add('show');
+      setTimeout(() => compDivLine.classList.add('grow'), 100);
+      setTimeout(() => compDivText.classList.add('show'), 500);
+    }
+  });
+}, { threshold: 0.2 });
+divObs.observe(compDivider);
+
+const gyeolObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      compGyeol.classList.add('visible');
+      compGyeol.querySelectorAll('.comp-gyeol-row').forEach(row => row.classList.add('visible'));
+    }
+  });
+}, { threshold: 0.1 });
+gyeolObs.observe(compGyeol);
+
+// ── LineWaves canvas — dramatic version ──
+const cvs = document.getElementById('waveCanvas');
+const ctx = cvs.getContext('2d');
+let waveTime = 0;
+let mouseY = 0.5;
+
+document.addEventListener('mousemove', e => { mouseY = e.clientY / window.innerHeight; });
+
+function resizeCanvas() {
+  const r = window.devicePixelRatio || 1;
+  cvs.width = cvs.parentElement.offsetWidth * r;
+  cvs.height = cvs.parentElement.offsetHeight * r;
+  ctx.scale(r, r);
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const waveLines = [];
+// 20 dense diagonal lines across the full screen
+for (let i = 0; i < 20; i++) {
+  waveLines.push({
+    y: 0.05 + (i / 20) * 0.92,
+    amp: 15 + Math.random() * 25,
+    freq: 0.003 + Math.random() * 0.004,
+    speed: 0.004 + Math.random() * 0.008,
+    alpha: 0.03 + Math.random() * 0.05,
+    width: 0.8 + Math.random() * 1.2,
+    slope: 0.15 + Math.random() * 0.2, // diagonal slope
+  });
+}
+
+function drawWaves() {
+  const w = cvs.parentElement.offsetWidth;
+  const h = cvs.parentElement.offsetHeight;
+  ctx.clearRect(0, 0, w, h);
+
+  // Center glow
+  const grd = ctx.createRadialGradient(w/2, h*0.45, 0, w/2, h*0.45, w*0.5);
+  grd.addColorStop(0, 'rgba(255,255,255,0.03)');
+  grd.addColorStop(1, 'transparent');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, w, h);
+
+  waveLines.forEach(line => {
+    ctx.beginPath();
+    const baseY = h * line.y;
+    const mouseInfluence = (mouseY - 0.5) * 10;
+
+    for (let x = -50; x <= w + 50; x += 1.5) {
+      const nx = x / w;
+      // Diagonal: y shifts down as x increases
+      const diag = x * line.slope;
+      const y = baseY + diag
+        + Math.sin(x * line.freq + waveTime * line.speed * 80) * line.amp
+        + Math.sin(x * line.freq * 2.1 + waveTime * line.speed * 35) * line.amp * 0.25
+        + mouseInfluence * Math.sin(nx * Math.PI);
+
+      if (x === -50) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+
+    ctx.strokeStyle = `rgba(255,255,255,${line.alpha})`;
+    ctx.lineWidth = line.width;
+    ctx.stroke();
+
+    // Glow for thicker lines
+    if (line.width >= 1.5) {
+      ctx.strokeStyle = `rgba(255,255,255,${line.alpha * 0.25})`;
+      ctx.lineWidth = line.width + 3;
+      ctx.stroke();
+    }
+  });
+
+  waveTime += 0.016;
+  requestAnimationFrame(drawWaves);
+}
+drawWaves();
+</script>
+</body>
+</html>
