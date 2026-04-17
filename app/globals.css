@@ -64,6 +64,17 @@ body {
   0%, 100% { opacity: 0.6; transform: scale(1); }
   50% { opacity: 1; transform: scale(1.08); }
 }
+@keyframes successOverlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes successCardDrop {
+  0%   { transform: translateY(-120%) rotate(-8deg); opacity: 0; }
+  55%  { transform: translateY(10px)  rotate(3deg);  opacity: 1; }
+  75%  { transform: translateY(-4px)  rotate(-1.5deg); }
+  90%  { transform: translateY(2px)   rotate(0.8deg); }
+  100% { transform: translateY(0)     rotate(0); opacity: 1; }
+}
 
 /* ── Gradient dividers ── */
 .g-divider { height: 1px; background: linear-gradient(90deg,transparent,var(--bl),transparent); }

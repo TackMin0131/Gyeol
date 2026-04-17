@@ -1,10 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import dynamic from "next/dynamic";
 import { useLang } from "@/hooks/useLang";
 import { useReveal } from "@/hooks/useReveal";
-
-const Lanyard = dynamic(() => import("./Lanyard/Lanyard"), { ssr: false });
 
 export default function Register() {
   const { lang, t } = useLang();
@@ -103,12 +100,12 @@ export default function Register() {
       {/* 結 watermark */}
       <div style={{ position: "absolute", font: "700 50vw/1 var(--serif)", color: "rgba(255,255,255,.012)", bottom: "-15%", right: "-5%", pointerEvents: "none", userSelect: "none" }}>結</div>
 
-      <div className="s-title reveal" style={{ color: "var(--dp)", marginBottom: 36, position: "relative", zIndex: 2, lineHeight: 1.5 }}
+      <div className="s-title reveal" style={{ color: "var(--dp)", marginBottom: 72, position: "relative", zIndex: 2, lineHeight: 1.5 }}
         dangerouslySetInnerHTML={{ __html: t("지금 등록하면,<br>가장 먼저 만납니다.", "今登録すれば、<br>最初に出会えます。") }}
       />
 
       {/* Urgency */}
-      <div className="reveal" style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", padding: "16px 36px", marginBottom: 28, position: "relative", zIndex: 2 }}>
+      <div className="reveal" style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", padding: "16px 36px", marginBottom: 36, position: "relative", zIndex: 2 }}>
         <span style={{
           content: "''", position: "absolute", inset: -1, padding: 1,
           background: "linear-gradient(135deg,rgba(255,255,255,.15),rgba(255,255,255,.03),rgba(255,255,255,.15))",
@@ -121,7 +118,7 @@ export default function Register() {
       </div>
 
       {/* Benefits */}
-      <div className="reveal" style={{ maxWidth: 340, margin: "0 auto 28px", textAlign: "center", position: "relative", zIndex: 2 }}>
+      <div className="reveal" style={{ maxWidth: 340, margin: "0 auto 36px", textAlign: "center", position: "relative", zIndex: 2 }}>
         <div style={{ padding: "16px 0", font: "500 13px/1.6 var(--sans)", color: "var(--ds)" }}>
           <span style={{ font: "700 16px/1 var(--sans)", color: "var(--dt)", textDecoration: "line-through" }}>{t("₩390,000/월", "プレミアムプラン")}</span>
           <span style={{ color: "var(--dt)", margin: "0 8px", fontSize: 14 }}>&rarr;</span>
@@ -215,16 +212,37 @@ export default function Register() {
           </div>
 
           {/* Legal consent */}
-          <div style={{ margin: "4px 0 18px", textAlign: "left", display: "flex", flexDirection: "column", gap: 10 }}>
+          <div style={{ margin: "4px 0 20px", textAlign: "left", display: "flex", flexDirection: "column", gap: 12 }}>
             <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer" }}>
+              <span
+                onClick={() => setAgreeRequired(!agreeRequired)}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: 16,
+                  height: 16,
+                  marginTop: 2,
+                  flexShrink: 0,
+                  border: `1px solid ${agreeRequired ? "var(--dp)" : "rgba(255,255,255,.3)"}`,
+                  background: agreeRequired ? "var(--dp)" : "transparent",
+                  borderRadius: 3,
+                  transition: ".15s",
+                }}
+              >
+                {agreeRequired && (
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--bk)" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                )}
+              </span>
               <input
                 type="checkbox"
                 checked={agreeRequired}
                 onChange={(e) => setAgreeRequired(e.target.checked)}
-                style={{ marginTop: 2, accentColor: "var(--dp)", width: 14, height: 14, flexShrink: 0 }}
+                style={{ position: "absolute", opacity: 0, width: 0, height: 0 }}
               />
-              <span style={{ font: "400 11px/1.55 var(--sans)", color: "var(--ds)" }}>
-                <span style={{ color: "#ff6b6b", marginRight: 4 }}>*</span>
+              <span style={{ font: "400 11px/1.6 var(--sans)", color: "var(--ds)" }}>
                 <a href="/legal/terms" target="_blank" rel="noopener noreferrer" style={{ color: "var(--dp)", textDecoration: "underline", textUnderlineOffset: 2 }}>
                   {t("이용약관", "利用規約")}
                 </a>
@@ -232,17 +250,39 @@ export default function Register() {
                 <a href="/legal/privacy" target="_blank" rel="noopener noreferrer" style={{ color: "var(--dp)", textDecoration: "underline", textUnderlineOffset: 2 }}>
                   {t("개인정보 처리방침", "プライバシーポリシー")}
                 </a>
-                {t("에 동의하며, 만 19세 이상(일본 거주자는 만 18세 이상)입니다. (필수)", "に同意し、満18歳以上であることを確認します。(必須)")}
+                {t("에 동의하며, 만 19세 이상(일본은 만 18세 이상)입니다. (필수)", "に同意し、満18歳以上であることを確認します。(必須)")}
               </span>
             </label>
             <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer" }}>
+              <span
+                onClick={() => setAgreeMarketing(!agreeMarketing)}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: 16,
+                  height: 16,
+                  marginTop: 2,
+                  flexShrink: 0,
+                  border: `1px solid ${agreeMarketing ? "var(--dp)" : "rgba(255,255,255,.3)"}`,
+                  background: agreeMarketing ? "var(--dp)" : "transparent",
+                  borderRadius: 3,
+                  transition: ".15s",
+                }}
+              >
+                {agreeMarketing && (
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--bk)" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                )}
+              </span>
               <input
                 type="checkbox"
                 checked={agreeMarketing}
                 onChange={(e) => setAgreeMarketing(e.target.checked)}
-                style={{ marginTop: 2, accentColor: "var(--dp)", width: 14, height: 14, flexShrink: 0 }}
+                style={{ position: "absolute", opacity: 0, width: 0, height: 0 }}
               />
-              <span style={{ font: "400 11px/1.55 var(--sans)", color: "var(--dt)" }}>
+              <span style={{ font: "400 11px/1.6 var(--sans)", color: "var(--dt)" }}>
                 {t("런칭 소식 및 혜택 안내 수신에 동의합니다. (선택)", "ローンチ情報・特典のお知らせ受信に同意します。(任意)")}
               </span>
             </label>
@@ -263,7 +303,7 @@ export default function Register() {
           </button>
         </div>
 
-      {/* Success modal — anticipatory */}
+      {/* Success modal — compact drop-in */}
       {success && (
         <div
           onClick={() => setSuccess(false)}
@@ -271,28 +311,30 @@ export default function Register() {
             position: "fixed",
             inset: 0,
             zIndex: 9999,
-            background: "radial-gradient(ellipse at 50% 30%, rgba(30,30,30,.85), rgba(0,0,0,.92))",
-            backdropFilter: "blur(10px)",
-            WebkitBackdropFilter: "blur(10px)",
+            background: "rgba(0,0,0,.72)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             padding: 20,
-            animation: "fadeUp .4s ease",
+            animation: "successOverlayIn .3s ease",
           }}
         >
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
               width: "100%",
-              maxWidth: 440,
-              padding: "28px 24px 32px",
-              background: "rgba(10,10,10,.6)",
+              maxWidth: 340,
+              padding: "36px 28px 28px",
+              background: "#0f0f0f",
               border: "1px solid rgba(255,255,255,.08)",
-              borderRadius: 16,
+              borderRadius: 10,
               textAlign: "center",
               position: "relative",
-              boxShadow: "0 30px 80px rgba(0,0,0,.7), 0 0 120px rgba(255,255,255,.03)",
+              boxShadow: "0 24px 60px rgba(0,0,0,.6)",
+              transformOrigin: "50% -200px",
+              animation: "successCardDrop .9s cubic-bezier(.22,1.2,.36,1)",
             }}
           >
             {/* Close */}
@@ -300,67 +342,44 @@ export default function Register() {
               onClick={() => setSuccess(false)}
               aria-label="close"
               style={{
-                position: "absolute", top: 12, right: 14, width: 32, height: 32,
+                position: "absolute", top: 10, right: 12, width: 28, height: 28,
                 border: "none", background: "transparent", color: "var(--dt)",
-                cursor: "pointer", fontSize: 22, lineHeight: 1, opacity: 0.5, zIndex: 2,
+                cursor: "pointer", fontSize: 20, lineHeight: 1, opacity: 0.5, zIndex: 2,
               }}
             >×</button>
 
-            {/* Eyebrow */}
-            <div style={{ font: "600 10px/1 var(--eng)", letterSpacing: 4, textTransform: "uppercase", color: "var(--dt)", marginBottom: 6, marginTop: 4 }}>
-              {t("당신의 결", "あなたの結")}
-            </div>
+            {/* 結 */}
+            <div style={{ font: "300 40px/1 var(--serif)", color: "var(--dp)", marginBottom: 18 }}>結</div>
 
             {/* Headline */}
-            <h3 style={{ font: "300 22px/1.45 var(--serif)", color: "var(--dp)", marginBottom: 14, letterSpacing: -0.5 }}>
+            <h3 style={{ font: "600 16px/1.4 var(--sans)", color: "var(--dp)", marginBottom: 8, letterSpacing: -0.2 }}>
               {t("당신의 인연이 시작되었습니다", "あなたの縁が始まりました")}
             </h3>
 
-            {/* Lanyard card */}
-            <div style={{ width: "100%", height: 340, position: "relative", marginBottom: 4 }}>
-              <Lanyard memberNumber={successNum} label={t("會員證", "會員證")} />
-            </div>
+            <p style={{ font: "400 12px/1.6 var(--sans)", color: "var(--dt)", marginBottom: 22 }}>
+              {t("런칭 당일, 가장 먼저 만나뵙겠습니다", "ローンチ当日、最初にお届けします")}
+            </p>
 
-            {/* Hint */}
-            <div style={{ font: "400 11px/1.6 var(--sans)", color: "rgba(255,255,255,.32)", marginBottom: 18, letterSpacing: 0.5 }}>
-              {t("카드를 잡고 움직여보세요", "カードをつかんで動かしてみてください")}
-            </div>
-
-            {/* Meta */}
-            <div style={{ padding: "18px 0", borderTop: "1px solid rgba(255,255,255,.06)", borderBottom: "1px solid rgba(255,255,255,.06)", marginBottom: 20 }}>
-              <div style={{ font: "500 10px/1 var(--sans)", letterSpacing: 3, color: "var(--dt)", textTransform: "uppercase", marginBottom: 10 }}>
+            {/* Member number */}
+            <div style={{ padding: "16px 0", borderTop: "1px solid rgba(255,255,255,.06)", borderBottom: "1px solid rgba(255,255,255,.06)", marginBottom: 22 }}>
+              <div style={{ font: "500 10px/1 var(--sans)", letterSpacing: 2.5, color: "var(--dt)", textTransform: "uppercase", marginBottom: 8 }}>
                 {t("창립 회원 번호", "創立会員番号")}
               </div>
-              <div style={{ font: "700 32px/1 var(--eng)", color: "var(--dp)", letterSpacing: 2 }}>
+              <div style={{ font: "700 26px/1 var(--eng)", color: "var(--dp)", letterSpacing: 1.5 }}>
                 #{String(successNum).padStart(4, "0")}
               </div>
-              <div style={{ font: "400 12px/1.6 var(--sans)", color: "var(--ds)", marginTop: 12 }}>
+              <div style={{ font: "400 11px/1 var(--sans)", color: "var(--ds)", marginTop: 10 }}>
                 {t("선착순 500명 중", "先着500名のうち")}
               </div>
             </div>
 
-            {/* Promise */}
-            <p style={{ font: "400 13px/1.8 var(--sans)", color: "var(--ds)", marginBottom: 22, padding: "0 8px" }}>
-              {t(
-                "런칭 당일, 가장 먼저 당신의 프로필이 공개됩니다.",
-                "ローンチ当日、最初にあなたのプロフィールが公開されます。"
-              )}
-              <br />
-              <span style={{ color: "var(--dt)", fontSize: 12 }}>
-                {t(
-                  "등록하신 이메일로 소식을 전해드릴게요.",
-                  "ご登録のメールアドレスにお知らせをお届けします。"
-                )}
-              </span>
-            </p>
-
             <button
               onClick={() => setSuccess(false)}
               style={{
-                width: "100%", padding: 15,
-                border: "1px solid rgba(255,255,255,.18)", borderRadius: 4,
+                width: "100%", padding: 14,
+                border: "1px solid rgba(255,255,255,.15)", borderRadius: 4,
                 background: "transparent", color: "var(--dp)",
-                font: "600 11px/1 var(--sans)", letterSpacing: 3,
+                font: "600 11px/1 var(--sans)", letterSpacing: 2.5,
                 cursor: "pointer", transition: ".2s",
               }}
               onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,.05)"; }}
