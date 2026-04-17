@@ -1,8 +1,10 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { useLang } from "@/hooks/useLang";
 import { useReveal } from "@/hooks/useReveal";
-import { supabase } from "@/lib/supabase";
+
+const Lanyard = dynamic(() => import("./Lanyard/Lanyard"), { ssr: false });
 
 export default function Register() {
   const { lang, t } = useLang();
@@ -12,10 +14,12 @@ export default function Register() {
   const [success, setSuccess] = useState(false);
   const [successNum, setSuccessNum] = useState(0);
   const [submitting, setSubmitting] = useState(false);
+  const [agreeRequired, setAgreeRequired] = useState(false);
+  const [agreeMarketing, setAgreeMarketing] = useState(false);
   const glowAngle = useRef(0);
   const btnRef = useRef<HTMLButtonElement>(null);
 
-  const canSubmit = email.includes("@") && gender;
+  const canSubmit = email.includes("@") && gender && agreeRequired;
 
   // Glow rotation
   useEffect(() => {
@@ -40,28 +44,24 @@ export default function Register() {
     if (!canSubmit) return;
     setSubmitting(true);
     try {
-      const { error } = await supabase
-        .from("registrations")
-        .insert({ email: email.trim().toLowerCase(), gender, lang });
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim().toLowerCase(), gender, lang }),
+      });
+      const data = await res.json();
 
-      if (error) {
-        // Postgres unique violation
-        if (error.code === "23505") {
+      if (!res.ok || !data.ok) {
+        if (data.error === "duplicate") {
           alert(t("이미 등록된 이메일입니다.", "すでに登録済みのメールです。"));
           setSubmitting(false);
           return;
         }
-        throw error;
+        throw new Error(data.error || "register_failed");
       }
 
-      // Get current total count for the success screen
-      const { count } = await supabase
-        .from("registrations")
-        .select("*", { count: "exact", head: true });
-
-      setSuccessNum(count ?? 1);
+      setSuccessNum(data.position ?? 1);
       setSuccess(true);
-      // reset form so if user reopens they don't see stale input
       setEmail("");
       setSubmitting(false);
     } catch (err) {
@@ -214,6 +214,40 @@ export default function Register() {
             />
           </div>
 
+          {/* Legal consent */}
+          <div style={{ margin: "4px 0 18px", textAlign: "left", display: "flex", flexDirection: "column", gap: 10 }}>
+            <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer" }}>
+              <input
+                type="checkbox"
+                checked={agreeRequired}
+                onChange={(e) => setAgreeRequired(e.target.checked)}
+                style={{ marginTop: 2, accentColor: "var(--dp)", width: 14, height: 14, flexShrink: 0 }}
+              />
+              <span style={{ font: "400 11px/1.55 var(--sans)", color: "var(--ds)" }}>
+                <span style={{ color: "#ff6b6b", marginRight: 4 }}>*</span>
+                <a href="/legal/terms" target="_blank" rel="noopener noreferrer" style={{ color: "var(--dp)", textDecoration: "underline", textUnderlineOffset: 2 }}>
+                  {t("이용약관", "利用規約")}
+                </a>
+                {t(" 및 ", " および ")}
+                <a href="/legal/privacy" target="_blank" rel="noopener noreferrer" style={{ color: "var(--dp)", textDecoration: "underline", textUnderlineOffset: 2 }}>
+                  {t("개인정보 처리방침", "プライバシーポリシー")}
+                </a>
+                {t("에 동의하며, 만 19세 이상(일본 거주자는 만 18세 이상)입니다. (필수)", "に同意し、満18歳以上であることを確認します。(必須)")}
+              </span>
+            </label>
+            <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer" }}>
+              <input
+                type="checkbox"
+                checked={agreeMarketing}
+                onChange={(e) => setAgreeMarketing(e.target.checked)}
+                style={{ marginTop: 2, accentColor: "var(--dp)", width: 14, height: 14, flexShrink: 0 }}
+              />
+              <span style={{ font: "400 11px/1.55 var(--sans)", color: "var(--dt)" }}>
+                {t("런칭 소식 및 혜택 안내 수신에 동의합니다. (선택)", "ローンチ情報・特典のお知らせ受信に同意します。(任意)")}
+              </span>
+            </label>
+          </div>
+
           <button
             ref={btnRef}
             disabled={!canSubmit || submitting}
@@ -229,7 +263,7 @@ export default function Register() {
           </button>
         </div>
 
-      {/* Success modal (overlay) */}
+      {/* Success modal — anticipatory */}
       {success && (
         <div
           onClick={() => setSuccess(false)}
@@ -237,91 +271,102 @@ export default function Register() {
             position: "fixed",
             inset: 0,
             zIndex: 9999,
-            background: "rgba(0,0,0,.75)",
-            backdropFilter: "blur(8px)",
-            WebkitBackdropFilter: "blur(8px)",
+            background: "radial-gradient(ellipse at 50% 30%, rgba(30,30,30,.85), rgba(0,0,0,.92))",
+            backdropFilter: "blur(10px)",
+            WebkitBackdropFilter: "blur(10px)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            padding: 24,
-            animation: "fadeUp .3s ease",
+            padding: 20,
+            animation: "fadeUp .4s ease",
           }}
         >
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
               width: "100%",
-              maxWidth: 400,
-              padding: "56px 32px 40px",
-              background: "var(--bk)",
-              border: "1px solid rgba(255,255,255,.12)",
-              borderRadius: 12,
+              maxWidth: 440,
+              padding: "28px 24px 32px",
+              background: "rgba(10,10,10,.6)",
+              border: "1px solid rgba(255,255,255,.08)",
+              borderRadius: 16,
               textAlign: "center",
               position: "relative",
-              boxShadow: "0 20px 60px rgba(0,0,0,.6), 0 0 80px rgba(255,255,255,.04)",
+              boxShadow: "0 30px 80px rgba(0,0,0,.7), 0 0 120px rgba(255,255,255,.03)",
             }}
           >
-            {/* Close button */}
+            {/* Close */}
             <button
               onClick={() => setSuccess(false)}
               aria-label="close"
               style={{
-                position: "absolute",
-                top: 14,
-                right: 14,
-                width: 32,
-                height: 32,
-                border: "none",
-                background: "transparent",
-                color: "var(--dt)",
-                cursor: "pointer",
-                fontSize: 22,
-                lineHeight: 1,
-                opacity: 0.6,
+                position: "absolute", top: 12, right: 14, width: 32, height: 32,
+                border: "none", background: "transparent", color: "var(--dt)",
+                cursor: "pointer", fontSize: 22, lineHeight: 1, opacity: 0.5, zIndex: 2,
               }}
-            >
-              ×
-            </button>
+            >×</button>
 
-            {/* 結 */}
-            <div style={{ font: "300 56px/1 var(--serif)", color: "var(--dp)", marginBottom: 18, letterSpacing: 0 }}>結</div>
-
-            {/* Check icon */}
-            <div style={{ width: 44, height: 44, borderRadius: "50%", border: "1.5px solid rgba(255,255,255,.25)", display: "inline-flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--dp)" }}>
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
+            {/* Eyebrow */}
+            <div style={{ font: "600 10px/1 var(--eng)", letterSpacing: 4, textTransform: "uppercase", color: "var(--dt)", marginBottom: 6, marginTop: 4 }}>
+              {t("당신의 결", "あなたの結")}
             </div>
 
-            <h3 style={{ font: "700 20px/1.35 var(--sans)", color: "var(--dp)", marginBottom: 14 }}>
-              {t("등록이 완료되었습니다", "登録が完了しました")}
+            {/* Headline */}
+            <h3 style={{ font: "300 22px/1.45 var(--serif)", color: "var(--dp)", marginBottom: 14, letterSpacing: -0.5 }}>
+              {t("당신의 인연이 시작되었습니다", "あなたの縁が始まりました")}
             </h3>
 
-            <p style={{ font: "400 14px/1.7 var(--sans)", color: "var(--ds)", marginBottom: 24 }}>
-              <strong style={{ color: "var(--dp)", fontWeight: 700, fontSize: 22, letterSpacing: 1 }}>{successNum.toLocaleString()}</strong>
-              {t("번째 회원입니다.", "番目の会員です。")}
+            {/* Lanyard card */}
+            <div style={{ width: "100%", height: 340, position: "relative", marginBottom: 4 }}>
+              <Lanyard memberNumber={successNum} label={t("會員證", "會員證")} />
+            </div>
+
+            {/* Hint */}
+            <div style={{ font: "400 11px/1.6 var(--sans)", color: "rgba(255,255,255,.32)", marginBottom: 18, letterSpacing: 0.5 }}>
+              {t("카드를 잡고 움직여보세요", "カードをつかんで動かしてみてください")}
+            </div>
+
+            {/* Meta */}
+            <div style={{ padding: "18px 0", borderTop: "1px solid rgba(255,255,255,.06)", borderBottom: "1px solid rgba(255,255,255,.06)", marginBottom: 20 }}>
+              <div style={{ font: "500 10px/1 var(--sans)", letterSpacing: 3, color: "var(--dt)", textTransform: "uppercase", marginBottom: 10 }}>
+                {t("창립 회원 번호", "創立会員番号")}
+              </div>
+              <div style={{ font: "700 32px/1 var(--eng)", color: "var(--dp)", letterSpacing: 2 }}>
+                #{String(successNum).padStart(4, "0")}
+              </div>
+              <div style={{ font: "400 12px/1.6 var(--sans)", color: "var(--ds)", marginTop: 12 }}>
+                {t("선착순 500명 중", "先着500名のうち")}
+              </div>
+            </div>
+
+            {/* Promise */}
+            <p style={{ font: "400 13px/1.8 var(--sans)", color: "var(--ds)", marginBottom: 22, padding: "0 8px" }}>
+              {t(
+                "런칭 당일, 가장 먼저 당신의 프로필이 공개됩니다.",
+                "ローンチ当日、最初にあなたのプロフィールが公開されます。"
+              )}
               <br />
-              {t("런칭 시 가장 먼저 찾아뵙겠습니다.", "ローンチ時に最初にお届けします。")}
+              <span style={{ color: "var(--dt)", fontSize: 12 }}>
+                {t(
+                  "등록하신 이메일로 소식을 전해드릴게요.",
+                  "ご登録のメールアドレスにお知らせをお届けします。"
+                )}
+              </span>
             </p>
 
             <button
               onClick={() => setSuccess(false)}
               style={{
-                width: "100%",
-                padding: 16,
-                border: "1px solid rgba(255,255,255,.2)",
-                borderRadius: 4,
-                background: "transparent",
-                color: "var(--dp)",
-                font: "600 12px/1 var(--sans)",
-                letterSpacing: 3,
-                cursor: "pointer",
-                transition: ".2s",
+                width: "100%", padding: 15,
+                border: "1px solid rgba(255,255,255,.18)", borderRadius: 4,
+                background: "transparent", color: "var(--dp)",
+                font: "600 11px/1 var(--sans)", letterSpacing: 3,
+                cursor: "pointer", transition: ".2s",
               }}
               onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,.05)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
             >
-              {t("확인", "確認")}
+              {t("닫기", "閉じる")}
             </button>
           </div>
         </div>
