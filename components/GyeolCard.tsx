@@ -35,13 +35,70 @@ export default function GyeolCard() {
     setGlowPos({ x: 50, y: 50 });
   }, []);
 
+  const iconStyle = { width: 16, height: 16, flexShrink: 0, color: "var(--dt)" } as const;
   const rows = [
-    { icon: "♥", label: t("목적", "目的"), value: t("결혼 Only", "結婚 Only") },
-    { icon: "🛡", label: t("신원확인", "身元確認"), value: t("5단계 인증", "5段階認証") },
-    { icon: "💳", label: t("비용", "費用"), value: t("월 19만~", "月¥1.9万~") },
-    { icon: "👥", label: t("매칭", "マッチング"), value: t("가치관 기반 주 3~5명", "価値観ベース 週3~5人") },
-    { icon: "🔒", label: t("안전", "安全"), value: t("만남~귀가 보호", "面会〜帰宅保護") },
-    { icon: "🌐", label: t("번역", "翻訳"), value: t("실시간 한↔일", "リアルタイム韓↔日") },
+    {
+      icon: (
+        <svg style={iconStyle} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0016.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 002 8.5c0 2.3 1.5 4.05 3 5.5l7 7z"/>
+        </svg>
+      ),
+      label: t("목적", "目的"),
+      value: t("결혼 Only", "結婚 Only"),
+    },
+    {
+      icon: (
+        <svg style={iconStyle} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="M9 12l2 2 4-4"/>
+        </svg>
+      ),
+      label: t("신원확인", "身元確認"),
+      value: t("5단계 인증", "5段階認証"),
+    },
+    {
+      icon: (
+        <svg style={iconStyle} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <rect x="2" y="5" width="20" height="14" rx="2"/>
+          <path d="M2 10h20"/>
+        </svg>
+      ),
+      label: t("비용", "費用"),
+      value: t("월 19만~", "月¥1.9万~"),
+    },
+    {
+      icon: (
+        <svg style={iconStyle} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4-4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M22 21v-2a4 4 0 00-3-3.87"/>
+          <path d="M16 3.13a4 4 0 010 7.75"/>
+        </svg>
+      ),
+      label: t("매칭", "マッチング"),
+      value: t("가치관 기반 주 3~5명", "価値観ベース 週3~5人"),
+    },
+    {
+      icon: (
+        <svg style={iconStyle} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0110 0v4"/>
+        </svg>
+      ),
+      label: t("안전", "安全"),
+      value: t("만남~귀가 보호", "面会〜帰宅保護"),
+    },
+    {
+      icon: (
+        <svg style={iconStyle} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M2 12h20"/>
+          <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+        </svg>
+      ),
+      label: t("번역", "翻訳"),
+      value: t("실시간 한↔일", "リアルタイム韓↔日"),
+    },
   ];
 
   return (
@@ -141,7 +198,7 @@ export default function GyeolCard() {
             }}
           >
             <span style={{ font: "500 13px/1 var(--sans)", color: "var(--ds)", display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{ fontSize: 14, opacity: 0.6 }}>{row.icon}</span>
+              {row.icon}
               {row.label}
             </span>
             <span style={{ font: "700 13px/1 var(--sans)", color: "var(--dp)", textAlign: "right" }}>
