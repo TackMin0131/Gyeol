@@ -2,22 +2,24 @@
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useLang } from "@/hooks/useLang";
+import { getTodayCount } from "@/lib/fakeCounter";
 
 const Silk = dynamic(() => import("./Silk/Silk.jsx"), { ssr: false });
 
 export default function Hero() {
   const { t } = useLang();
   const [count, setCount] = useState(0);
-  const target = useRef(20 + Math.floor(Math.random() * 18));
   const sectionRef = useRef<HTMLElement>(null);
   const [silkVisible, setSilkVisible] = useState(true);
 
-  // Counter animation
+  // Counter: animate 0 → today's KST count, then silently update every minute
+  // (so the hourly bump appears if the user leaves the tab open)
   useEffect(() => {
+    const initial = getTodayCount().total;
     const timer = setTimeout(() => {
       let cur = 0;
       const frame = () => {
-        if (cur < target.current) {
+        if (cur < initial) {
           cur++;
           setCount(cur);
           requestAnimationFrame(frame);
@@ -25,7 +27,15 @@ export default function Hero() {
       };
       requestAnimationFrame(frame);
     }, 1200);
-    return () => clearTimeout(timer);
+
+    const interval = setInterval(() => {
+      setCount(getTodayCount().total);
+    }, 60_000);
+
+    return () => {
+      clearTimeout(timer);
+      clearInterval(interval);
+    };
   }, []);
 
   // Pause Silk WebGL when Hero is out of view to save GPU

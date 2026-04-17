@@ -61,6 +61,9 @@ export default function Register() {
 
       setSuccessNum(count ?? 1);
       setSuccess(true);
+      // reset form so if user reopens they don't see stale input
+      setEmail("");
+      setSubmitting(false);
     } catch (err) {
       console.error("[register] failed:", err);
       alert(t("등록에 실패했습니다. 잠시 후 다시 시도해주세요.", "登録に失敗しました。しばらくしてから再度お試しください。"));
@@ -129,22 +132,21 @@ export default function Register() {
       </div>
 
       {/* Form */}
-      {!success ? (
-        <div
-          className="reveal"
-          style={{
-            maxWidth: 340,
-            margin: "0 auto",
-            position: "relative",
-            zIndex: 2,
-            padding: "28px 22px",
-            background: "rgba(255,255,255,.03)",
-            border: "1px solid rgba(255,255,255,.08)",
-            borderRadius: 12,
-            backdropFilter: "blur(8px)",
-            WebkitBackdropFilter: "blur(8px)",
-          }}
-        >
+      <div
+        className="reveal"
+        style={{
+          maxWidth: 340,
+          margin: "0 auto",
+          position: "relative",
+          zIndex: 2,
+          padding: "28px 22px",
+          background: "rgba(255,255,255,.03)",
+          border: "1px solid rgba(255,255,255,.08)",
+          borderRadius: 12,
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
+        }}
+      >
           {/* Email field group */}
           <div style={{ marginBottom: 24, textAlign: "left" }}>
             <div style={{ font: "500 11px/1 var(--sans)", color: "var(--dt)", letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 10 }}>
@@ -226,15 +228,102 @@ export default function Register() {
             {submitting ? t("등록 중...", "登録中...") : t("사전등록", "事前登録")}
           </button>
         </div>
-      ) : (
-        <div style={{ padding: "40px 0", position: "relative", zIndex: 2 }}>
-          <h3 style={{ font: "700 22px/1.35 var(--sans)", marginBottom: 20 }}>{t("등록이 완료되었습니다.", "登録が完了しました。")}</h3>
-          <p style={{ font: "400 14px/1.6 var(--sans)", color: "var(--ds)" }}>
-            <strong style={{ color: "var(--dp)", fontWeight: 700, fontSize: 20 }}>{successNum}</strong>
-            {t("번째 회원.", "番目の会員。")}
-            <br /><br />
-            {t("런칭 시 가장 먼저 찾아뵙겠습니다.", "ローンチ時に最初にお届けします。")}
-          </p>
+
+      {/* Success modal (overlay) */}
+      {success && (
+        <div
+          onClick={() => setSuccess(false)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 9999,
+            background: "rgba(0,0,0,.75)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 24,
+            animation: "fadeUp .3s ease",
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              width: "100%",
+              maxWidth: 400,
+              padding: "56px 32px 40px",
+              background: "var(--bk)",
+              border: "1px solid rgba(255,255,255,.12)",
+              borderRadius: 12,
+              textAlign: "center",
+              position: "relative",
+              boxShadow: "0 20px 60px rgba(0,0,0,.6), 0 0 80px rgba(255,255,255,.04)",
+            }}
+          >
+            {/* Close button */}
+            <button
+              onClick={() => setSuccess(false)}
+              aria-label="close"
+              style={{
+                position: "absolute",
+                top: 14,
+                right: 14,
+                width: 32,
+                height: 32,
+                border: "none",
+                background: "transparent",
+                color: "var(--dt)",
+                cursor: "pointer",
+                fontSize: 22,
+                lineHeight: 1,
+                opacity: 0.6,
+              }}
+            >
+              ×
+            </button>
+
+            {/* 結 */}
+            <div style={{ font: "300 56px/1 var(--serif)", color: "var(--dp)", marginBottom: 18, letterSpacing: 0 }}>結</div>
+
+            {/* Check icon */}
+            <div style={{ width: 44, height: 44, borderRadius: "50%", border: "1.5px solid rgba(255,255,255,.25)", display: "inline-flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--dp)" }}>
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </div>
+
+            <h3 style={{ font: "700 20px/1.35 var(--sans)", color: "var(--dp)", marginBottom: 14 }}>
+              {t("등록이 완료되었습니다", "登録が完了しました")}
+            </h3>
+
+            <p style={{ font: "400 14px/1.7 var(--sans)", color: "var(--ds)", marginBottom: 24 }}>
+              <strong style={{ color: "var(--dp)", fontWeight: 700, fontSize: 22, letterSpacing: 1 }}>{successNum.toLocaleString()}</strong>
+              {t("번째 회원입니다.", "番目の会員です。")}
+              <br />
+              {t("런칭 시 가장 먼저 찾아뵙겠습니다.", "ローンチ時に最初にお届けします。")}
+            </p>
+
+            <button
+              onClick={() => setSuccess(false)}
+              style={{
+                width: "100%",
+                padding: 16,
+                border: "1px solid rgba(255,255,255,.2)",
+                borderRadius: 4,
+                background: "transparent",
+                color: "var(--dp)",
+                font: "600 12px/1 var(--sans)",
+                letterSpacing: 3,
+                cursor: "pointer",
+                transition: ".2s",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,.05)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+            >
+              {t("확인", "確認")}
+            </button>
+          </div>
         </div>
       )}
 
