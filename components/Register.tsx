@@ -152,7 +152,7 @@ export default function Register() {
                   width: "100%",
                   padding: "14px 16px",
                   border: "1px solid rgba(255,255,255,.15)",
-                  borderRadius: 6,
+                  borderRadius: 4,
                   background: "rgba(0,0,0,.4)",
                   color: "var(--dp)",
                   font: "400 14px/1 var(--sans)",
@@ -182,7 +182,7 @@ export default function Register() {
                     flex: 1,
                     padding: "16px 12px",
                     border: `1px solid ${gender === g.value ? "var(--dp)" : "rgba(255,255,255,.15)"}`,
-                    borderRadius: 6,
+                    borderRadius: 4,
                     background: gender === g.value ? "rgba(255,255,255,.1)" : "rgba(0,0,0,.4)",
                     cursor: "pointer",
                     transition: ".3s",
@@ -209,7 +209,7 @@ export default function Register() {
             disabled={!canSubmit || submitting}
             onClick={handleSubmit}
             style={{
-              width: "100%", padding: 20, border: "none", background: "var(--wh)", color: "var(--bk)",
+              width: "100%", padding: 20, border: "none", borderRadius: 4, background: "var(--wh)", color: "var(--bk)",
               font: "700 13px/1 var(--sans)", letterSpacing: 3, cursor: canSubmit ? "pointer" : "not-allowed",
               transition: ".3s", position: "relative", overflow: "visible",
               opacity: canSubmit && !submitting ? 1 : 0.35,

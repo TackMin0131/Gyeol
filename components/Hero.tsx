@@ -9,6 +9,8 @@ export default function Hero() {
   const { t } = useLang();
   const [count, setCount] = useState(0);
   const target = useRef(20 + Math.floor(Math.random() * 18));
+  const sectionRef = useRef<HTMLElement>(null);
+  const [silkVisible, setSilkVisible] = useState(true);
 
   // Counter animation
   useEffect(() => {
@@ -26,10 +28,22 @@ export default function Hero() {
     return () => clearTimeout(timer);
   }, []);
 
+  // Pause Silk WebGL when Hero is out of view to save GPU
+  useEffect(() => {
+    if (!sectionRef.current) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setSilkVisible(entry.isIntersecting),
+      { threshold: 0, rootMargin: "100px" }
+    );
+    obs.observe(sectionRef.current);
+    return () => obs.disconnect();
+  }, []);
+
   const headline = t("결국 만나야 할 사람", "結局、出会うべき人");
 
   return (
     <section
+      ref={sectionRef}
       style={{
         minHeight: "100vh",
         display: "flex",
@@ -44,15 +58,17 @@ export default function Hero() {
         overflow: "hidden",
       }}
     >
-      {/* Silk background (monochrome) */}
-      <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0 }}>
-        <Silk
-          speed={4}
-          scale={1}
-          color="#2a2a2a"
-          noiseIntensity={1.5}
-          rotation={0}
-        />
+      {/* Silk background (monochrome) - paused when out of view */}
+      <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, visibility: silkVisible ? "visible" : "hidden" }}>
+        {silkVisible && (
+          <Silk
+            speed={4}
+            scale={1}
+            color="#2a2a2a"
+            noiseIntensity={1.5}
+            rotation={0}
+          />
+        )}
       </div>
 
       <div style={{ position: "relative", zIndex: 2, padding: "0 8px", maxWidth: "100%", width: "100%" }}>
@@ -124,7 +140,7 @@ export default function Hero() {
                 content: "''",
                 position: "absolute",
                 inset: -1,
-                borderRadius: 2,
+                borderRadius: 4,
                 padding: 1,
                 background:
                   "linear-gradient(135deg,rgba(255,255,255,.5),rgba(255,255,255,.05),rgba(255,255,255,.5))",
