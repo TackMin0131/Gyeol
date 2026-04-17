@@ -2,8 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useLang } from "@/hooks/useLang";
 import { useReveal } from "@/hooks/useReveal";
-
-const SHEET_URL = "YOUR_APPS_SCRIPT_URL_HERE";
+import { supabase } from "@/lib/supabase";
 
 export default function Register() {
   const { lang, t } = useLang();
@@ -41,22 +40,31 @@ export default function Register() {
     if (!canSubmit) return;
     setSubmitting(true);
     try {
-      const res = await fetch(SHEET_URL, {
-        method: "POST",
-        body: JSON.stringify({ email, gender, lang }),
-        headers: { "Content-Type": "text/plain" },
-      });
-      const data = await res.json();
-      if (data.result === "duplicate") {
-        alert(t("이미 등록된 이메일입니다.", "すでに登録済みのメールです。"));
-        setSubmitting(false);
-        return;
+      const { error } = await supabase
+        .from("registrations")
+        .insert({ email: email.trim().toLowerCase(), gender, lang });
+
+      if (error) {
+        // Postgres unique violation
+        if (error.code === "23505") {
+          alert(t("이미 등록된 이메일입니다.", "すでに登録済みのメールです。"));
+          setSubmitting(false);
+          return;
+        }
+        throw error;
       }
-      setSuccessNum(data.count);
+
+      // Get current total count for the success screen
+      const { count } = await supabase
+        .from("registrations")
+        .select("*", { count: "exact", head: true });
+
+      setSuccessNum(count ?? 1);
       setSuccess(true);
-    } catch {
-      setSuccessNum(500);
-      setSuccess(true);
+    } catch (err) {
+      console.error("[register] failed:", err);
+      alert(t("등록에 실패했습니다. 잠시 후 다시 시도해주세요.", "登録に失敗しました。しばらくしてから再度お試しください。"));
+      setSubmitting(false);
     }
   }
 
