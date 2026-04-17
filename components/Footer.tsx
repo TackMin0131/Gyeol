@@ -28,7 +28,7 @@ export default function Footer() {
         <br />
         <span>경기도 광명시 성채로 37</span>
         <br />
-        <span>contact@gyeol.com</span>
+        <a href="mailto:skyty0131@gmail.com" style={{ color: "inherit", textDecoration: "none" }}>skyty0131@gmail.com</a>
       </div>
       <div style={{ font: "400 13px/1 var(--sans)", color: "rgba(255,255,255,.12)", marginTop: 20 }}>
         &copy; 2026 GYEOL. All rights reserved.
