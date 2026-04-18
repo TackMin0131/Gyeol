@@ -51,7 +51,7 @@ export default function Footer() {
             {t("개인정보처리방침", "プライバシーポリシー")}
           </Link>
           <span style={sepStyle}>·</span>
-          <Link href="/legal/terms" style={linkStyle}>
+          <Link href="/legal/commerce" style={linkStyle}>
             {t("특정상거래법 표시", "特定商取引法")}
           </Link>
         </div>

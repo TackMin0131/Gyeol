@@ -234,35 +234,29 @@ export default function Hero() {
           animation: "fadeUp .8s ease 1.7s forwards",
         }}
       >
-        <span style={{ display: "inline-block", paddingLeft: 4, opacity: 0.9 }}>SCROLL</span>
-        {/* Track with a dot oscillating up/down */}
+        {/* Text gently bobs up and down */}
+        <span
+          style={{
+            display: "inline-block",
+            paddingLeft: 4,
+            opacity: 0.9,
+            animation: "scrollTextBob 2s ease-in-out infinite",
+          }}
+        >
+          SCROLL
+        </span>
+        {/* Same line style as before — scaleY + opacity pulse */}
         <span
           aria-hidden
           style={{
-            position: "relative",
             display: "block",
             width: 1,
-            height: 40,
-            margin: "12px auto 0",
-            background: "rgba(255,255,255,.14)",
-            overflow: "visible",
+            height: 24,
+            margin: "10px auto 0",
+            background: "linear-gradient(to bottom,var(--dt),transparent)",
+            animation: "scrollLine 2s ease infinite",
           }}
-        >
-          <span
-            style={{
-              position: "absolute",
-              top: 0,
-              left: "50%",
-              width: 5,
-              height: 5,
-              marginLeft: -2.5,
-              borderRadius: "50%",
-              background: "var(--dp)",
-              boxShadow: "0 0 8px rgba(255,255,255,.6)",
-              animation: "scrollDot 1.8s ease-in-out infinite",
-            }}
-          />
-        </span>
+        />
       </div>
     </section>
   );
