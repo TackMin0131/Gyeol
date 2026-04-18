@@ -70,6 +70,28 @@ export default function AdminPage() {
     setRows([]);
   }
 
+  async function handleDelete(row: Row) {
+    const ok = confirm(`정말 삭제하시겠습니까?\n\n${row.email}\n\n이 작업은 되돌릴 수 없습니다.`);
+    if (!ok) return;
+    try {
+      const res = await fetch("/api/admin/registrations", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: row.id }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        alert("삭제 실패: " + (data.error || "unknown"));
+        return;
+      }
+      setRows((prev) => prev.filter((r) => r.id !== row.id));
+      setTotal((prev) => Math.max(0, prev - 1));
+    } catch (err) {
+      alert("삭제 중 오류가 발생했습니다.");
+      console.error(err);
+    }
+  }
+
   function downloadCSV() {
     const header = ["email", "gender", "lang", "created_at"];
     const csv = [
@@ -181,11 +203,12 @@ export default function AdminPage() {
                 <th style={th}>성별</th>
                 <th style={th}>언어</th>
                 <th style={th}>등록일시</th>
+                <th style={{ ...th, textAlign: "right", width: 80 }}>작업</th>
               </tr>
             </thead>
             <tbody>
               {filtered.length === 0 ? (
-                <tr><td colSpan={5} style={{ ...td, textAlign: "center", color: "rgba(255,255,255,.3)", padding: 40 }}>{rows.length === 0 ? "아직 등록이 없습니다." : "조건에 맞는 결과가 없습니다."}</td></tr>
+                <tr><td colSpan={6} style={{ ...td, textAlign: "center", color: "rgba(255,255,255,.3)", padding: 40 }}>{rows.length === 0 ? "아직 등록이 없습니다." : "조건에 맞는 결과가 없습니다."}</td></tr>
               ) : (
                 filtered.map((r, i) => (
                   <tr key={r.id} style={{ borderTop: "1px solid rgba(255,255,255,.05)" }}>
@@ -198,6 +221,24 @@ export default function AdminPage() {
                     </td>
                     <td style={{ ...td, color: "rgba(255,255,255,.5)" }}>{r.lang.toUpperCase()}</td>
                     <td style={{ ...td, color: "rgba(255,255,255,.5)", fontVariantNumeric: "tabular-nums" }}>{new Date(r.created_at).toLocaleString("ko-KR")}</td>
+                    <td style={{ ...td, textAlign: "right" }}>
+                      <button
+                        onClick={() => handleDelete(r)}
+                        style={{
+                          padding: "6px 10px",
+                          background: "transparent",
+                          color: "#ff6b6b",
+                          border: "1px solid rgba(255,107,107,.25)",
+                          borderRadius: 4,
+                          font: "500 11px/1 system-ui",
+                          cursor: "pointer",
+                        }}
+                        onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,107,107,.08)"; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+                      >
+                        삭제
+                      </button>
+                    </td>
                   </tr>
                 ))
               )}

@@ -55,13 +55,14 @@ export default function Hero() {
     <section
       ref={sectionRef}
       style={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
+        height: "100svh",
+        minHeight: 640,
+        display: "grid",
+        gridTemplateRows: "1fr auto",
         alignItems: "center",
         textAlign: "center",
-        padding: "140px 24px 100px",
+        paddingTop: 120,
+        paddingBottom: 0,
         background: "var(--bk)",
         color: "var(--dp)",
         position: "relative",
@@ -81,7 +82,30 @@ export default function Hero() {
         )}
       </div>
 
-      <div style={{ position: "relative", zIndex: 2, padding: "0 8px", maxWidth: "100%", width: "100%" }}>
+      <div style={{ position: "relative", zIndex: 2, padding: "0 24px", maxWidth: "100%", width: "100%", alignSelf: "center" }}>
+        {/* Category eyebrow — marriage matching platform */}
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 8,
+            padding: "7px 14px",
+            marginBottom: 24,
+            border: "1px solid rgba(255,255,255,.14)",
+            borderRadius: 999,
+            background: "rgba(255,255,255,.03)",
+            backdropFilter: "blur(6px)",
+            WebkitBackdropFilter: "blur(6px)",
+            opacity: 0,
+            animation: "fadeUp .8s ease .2s forwards",
+          }}
+        >
+          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#ff6b6b", boxShadow: "0 0 8px #ff6b6b" }} />
+          <span style={{ font: "600 10.5px/1 var(--sans)", letterSpacing: 2, color: "var(--ds)", textTransform: "uppercase" }}>
+            {t("한・일 국제결혼 중개 플랫폼", "日韓国際結婚仲介プラットフォーム")}
+          </span>
+        </div>
+
         <h1
           style={{
             font: "800 30px/1.5 var(--sans)",
@@ -187,29 +211,31 @@ export default function Hero() {
 
       <div
         style={{
-          position: "absolute",
-          bottom: 32,
-          left: 0,
-          right: 0,
           textAlign: "center",
-          font: "300 13px/1 var(--eng)",
+          paddingBottom: 28,
+          font: "500 10.5px/1 var(--eng)",
           color: "var(--dt)",
           letterSpacing: 4,
           textTransform: "uppercase",
           opacity: 0,
           animation: "fadeUp .8s ease 1.7s forwards",
           zIndex: 2,
+          position: "relative",
         }}
       >
-        <span style={{ display: "inline-block", paddingLeft: 4 }}>scroll</span>
+        <span style={{ display: "inline-block", paddingLeft: 4, opacity: 0.9 }}>
+          {t("스크롤", "SCROLL")}
+        </span>
         <span
+          aria-hidden
           style={{
             display: "block",
             width: 1,
-            height: 24,
-            margin: "10px auto 0",
-            background: "linear-gradient(to bottom,var(--dt),transparent)",
-            animation: "scrollLine 2s ease infinite",
+            height: 36,
+            margin: "12px auto 0",
+            background: "linear-gradient(to bottom, rgba(255,255,255,.55), transparent)",
+            animation: "scrollLineGlow 1.8s ease-in-out infinite",
+            transformOrigin: "top",
           }}
         />
       </div>
