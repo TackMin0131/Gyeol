@@ -56,17 +56,20 @@ export default function Footer() {
           </Link>
         </div>
 
-        {/* Business info — single line, unified font */}
+        {/* Business info — single line, unified font. Atomic word-pairs use nowrap to avoid breaking inside an address or number. */}
         <div style={dataStyle}>
-          {t("상호 결", "商号 結")}
+          <span style={{ whiteSpace: "nowrap" }}>{t("상호 결", "商号 結")}</span>
           <span style={dataSep}>·</span>
-          {t("대표 김택민", "代表 金澤民")}
+          <span style={{ whiteSpace: "nowrap" }}>{t("대표 김택민", "代表 金澤民")}</span>
           <span style={dataSep}>·</span>
-          {t("사업자등록번호 493-14-02639", "事業者登録番号 493-14-02639")}
+          <span style={{ whiteSpace: "nowrap" }}>{t("사업자등록번호 493-14-02639", "事業者登録番号 493-14-02639")}</span>
           <span style={dataSep}>·</span>
-          {t("경기도 광명시 성채로 37", "大韓民国 京畿道 光明市 城菜路37")}
+          <span style={{ whiteSpace: "nowrap" }}>
+            {t("경기도 광명시 ", "大韓民国 京畿道 光明市 ")}
+            <span style={{ whiteSpace: "nowrap" }}>{t("성채로 37", "城菜路 37")}</span>
+          </span>
           <span style={dataSep}>·</span>
-          <a href="mailto:skyty0131@gmail.com" style={{ color: "inherit", textDecoration: "none" }}>
+          <a href="mailto:skyty0131@gmail.com" style={{ color: "inherit", textDecoration: "none", whiteSpace: "nowrap" }}>
             skyty0131@gmail.com
           </a>
         </div>

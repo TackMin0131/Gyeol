@@ -83,27 +83,23 @@ export default function Hero() {
       </div>
 
       <div style={{ position: "relative", zIndex: 2, padding: "0 24px", maxWidth: "100%", width: "100%", alignSelf: "center" }}>
-        {/* Category eyebrow — marriage matching platform */}
+        {/* Category eyebrow — minimal hairline rule, English */}
         <div
           style={{
             display: "inline-flex",
             alignItems: "center",
-            gap: 8,
-            padding: "7px 14px",
-            marginBottom: 24,
-            border: "1px solid rgba(255,255,255,.14)",
-            borderRadius: 999,
-            background: "rgba(255,255,255,.03)",
-            backdropFilter: "blur(6px)",
-            WebkitBackdropFilter: "blur(6px)",
+            justifyContent: "center",
+            gap: 14,
+            marginBottom: 26,
             opacity: 0,
             animation: "fadeUp .8s ease .2s forwards",
           }}
         >
-          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#ff6b6b", boxShadow: "0 0 8px #ff6b6b" }} />
-          <span style={{ font: "600 10.5px/1 var(--sans)", letterSpacing: 2, color: "var(--ds)", textTransform: "uppercase" }}>
-            {t("한・일 국제결혼 중개 플랫폼", "日韓国際結婚仲介プラットフォーム")}
+          <span style={{ display: "inline-block", width: 24, height: 1, background: "rgba(255,255,255,.28)" }} />
+          <span style={{ font: "600 10.5px/1 var(--eng)", letterSpacing: 4, color: "var(--ds)", textTransform: "uppercase", whiteSpace: "nowrap" }}>
+            KR × JP International Marriage
           </span>
+          <span style={{ display: "inline-block", width: 24, height: 1, background: "rgba(255,255,255,.28)" }} />
         </div>
 
         <h1
@@ -223,21 +219,35 @@ export default function Hero() {
           position: "relative",
         }}
       >
-        <span style={{ display: "inline-block", paddingLeft: 4, opacity: 0.9 }}>
-          {t("스크롤", "SCROLL")}
-        </span>
+        <span style={{ display: "inline-block", paddingLeft: 4, opacity: 0.9 }}>SCROLL</span>
+        {/* Track with a dot oscillating up/down */}
         <span
           aria-hidden
           style={{
+            position: "relative",
             display: "block",
             width: 1,
-            height: 36,
+            height: 40,
             margin: "12px auto 0",
-            background: "linear-gradient(to bottom, rgba(255,255,255,.55), transparent)",
-            animation: "scrollLineGlow 1.8s ease-in-out infinite",
-            transformOrigin: "top",
+            background: "rgba(255,255,255,.14)",
+            overflow: "visible",
           }}
-        />
+        >
+          <span
+            style={{
+              position: "absolute",
+              top: 0,
+              left: "50%",
+              width: 5,
+              height: 5,
+              marginLeft: -2.5,
+              borderRadius: "50%",
+              background: "var(--dp)",
+              boxShadow: "0 0 8px rgba(255,255,255,.6)",
+              animation: "scrollDot 1.8s ease-in-out infinite",
+            }}
+          />
+        </span>
       </div>
     </section>
   );

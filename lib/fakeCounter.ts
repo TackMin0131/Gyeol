@@ -17,18 +17,19 @@ function hashIncrement(seed: string): number {
 
 /** Returns { total, hour } where total is cumulative KST-today signups up to now. */
 export function getTodayCount(now: Date = new Date()): { total: number; hour: number; dateKey: string } {
-  // Convert to KST regardless of viewer's timezone
-  const utcMs = now.getTime() + now.getTimezoneOffset() * 60_000;
-  const kst = new Date(utcMs + 9 * 60 * 60_000);
+  // now.getTime() is UTC epoch ms regardless of viewer locale.
+  // KST = UTC+9, so shift +9h and read the shifted clock via getUTC* methods.
+  const kst = new Date(now.getTime() + 9 * 60 * 60_000);
   const y = kst.getUTCFullYear();
   const m = String(kst.getUTCMonth() + 1).padStart(2, "0");
   const d = String(kst.getUTCDate()).padStart(2, "0");
   const hour = kst.getUTCHours();
   const dateKey = `${y}-${m}-${d}`;
 
-  // Hour 0: between 00:00 and 01:00 KST → already counts as 1 hourly bump
+  // Reset to 0 at KST midnight. First +1~3 bump happens at 01:00 KST.
+  // e.g. hour=0 → 0, hour=1 → 1~3, hour=23 → 23~69.
   let total = 0;
-  for (let h = 0; h <= hour; h++) {
+  for (let h = 1; h <= hour; h++) {
     total += hashIncrement(`${dateKey}:${h}`);
   }
   return { total, hour, dateKey };
